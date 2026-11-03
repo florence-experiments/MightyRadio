@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PlatformTarget>x64</PlatformTarget>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>false</PublishSingleFile>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>MightyRadio</AssemblyName>
+    <RootNamespace>MightyRadio</RootNamespace>
+    <Product>Mighty Radio</Product>
+    <AssemblyTitle>Mighty Radio</AssemblyTitle>
+    <Description>Mighty Radio - simple internet radio player</Description>
+    <Company>Mighty Radio</Company>
+    <Version>1.0.0</Version>
+    <ApplicationIcon>Assets\MightyRadio.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <!-- No telemetry / diagnostics extras -->
+    <EventSourceSupport>false</EventSourceSupport>
+    <!-- Only bundle the 64-bit VLC engine (lands in libvlc\win-x64) -->
+    <VlcWindowsX64Enabled>true</VlcWindowsX64Enabled>
+    <VlcWindowsX86Enabled>false</VlcWindowsX86Enabled>
+    <VlcWindowsArm64Enabled>false</VlcWindowsArm64Enabled>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Ship the VLC runtime files only (skip the .lib import libraries used for C++ linking) -->
+    <VlcWindowsX64IncludeFiles Include="libvlc.dll;libvlccore.dll;hrtfs\%2A%2A;lua\%2A%2A;plugins\%2A%2A" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\MightyRadio.ico" />
+    <Content Include="stations-scanner.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibVLCSharp" Version="3.10.2" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.24" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,706 @@
+{
+  "_readme": "Mighty Radio scanner feeds. Edit freely: add entries with name, category, region, url, type (\"stream\" plays inside Mighty Radio, \"web\" opens in your browser) and notes. Keep it valid JSON (commas between entries!). Mighty Radio reads this file at start-up.",
+  "feeds": [
+    {
+      "name": "Amsterdam Schiphol (EHAM) - LiveATC",
+      "category": "Air / ATC",
+      "region": "Netherlands",
+      "url": "https://www.liveatc.net/search/?icao=EHAM",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Atlanta (KATL) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - Georgia",
+      "url": "https://www.liveatc.net/search/?icao=KATL",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Broadcastify - Aviation feeds",
+      "category": "Air / ATC",
+      "region": "Worldwide",
+      "url": "https://www.broadcastify.com/listen/top/",
+      "type": "web",
+      "notes": "Broadcastify feed directory (filter by Aviation)."
+    },
+    {
+      "name": "Detroit (KDTW) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - Michigan",
+      "url": "https://www.liveatc.net/search/?icao=KDTW",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Hong Kong (VHHH) - LiveATC",
+      "category": "Air / ATC",
+      "region": "Hong Kong",
+      "url": "https://www.liveatc.net/search/?icao=VHHH",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "LiveATC.net - all feeds",
+      "category": "Air / ATC",
+      "region": "Worldwide",
+      "url": "https://www.liveatc.net/",
+      "type": "web",
+      "notes": "Directory of live air traffic control feeds worldwide."
+    },
+    {
+      "name": "Los Angeles LAX (KLAX) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - California",
+      "url": "https://www.liveatc.net/search/?icao=KLAX",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Montreal (CYUL) - LiveATC",
+      "category": "Air / ATC",
+      "region": "Canada - Quebec",
+      "url": "https://www.liveatc.net/search/?icao=CYUL",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Nashville (KBNA) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - Tennessee",
+      "url": "https://www.liveatc.net/search/?icao=KBNA",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "New York JFK (KJFK) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - New York",
+      "url": "https://www.liveatc.net/search/?icao=KJFK",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "New York LaGuardia (KLGA) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - New York",
+      "url": "https://www.liveatc.net/search/?icao=KLGA",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Newark (KEWR) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - New Jersey",
+      "url": "https://www.liveatc.net/search/?icao=KEWR",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "San Francisco SFO (KSFO) - LiveATC",
+      "category": "Air / ATC",
+      "region": "US - California",
+      "url": "https://www.liveatc.net/search/?icao=KSFO",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Shannon VOLMET 5505 kHz (WebSDR Twente)",
+      "category": "Air / ATC",
+      "region": "North Atlantic / Ireland",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=5505usb",
+      "type": "web",
+      "notes": "Aviation weather broadcast on HF, via the University of Twente WebSDR."
+    },
+    {
+      "name": "Shanwick Oceanic 8879 kHz (WebSDR Twente)",
+      "category": "Air / ATC",
+      "region": "North Atlantic",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=8879usb",
+      "type": "web",
+      "notes": "Oceanic air traffic control HF voice."
+    },
+    {
+      "name": "Sydney (YSSY) - LiveATC",
+      "category": "Air / ATC",
+      "region": "Australia",
+      "url": "https://www.liveatc.net/search/?icao=YSSY",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Tokyo Haneda (RJTT) - LiveATC",
+      "category": "Air / ATC",
+      "region": "Japan",
+      "url": "https://www.liveatc.net/search/?icao=RJTT",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Tokyo Narita (RJAA) - LiveATC",
+      "category": "Air / ATC",
+      "region": "Japan",
+      "url": "https://www.liveatc.net/search/?icao=RJAA",
+      "type": "web",
+      "notes": "Opens LiveATC.net in your browser (tower, ground, approach feeds)."
+    },
+    {
+      "name": "Monterey Marine Weather WWF64 162.450 MHz",
+      "category": "Marine / VHF",
+      "region": "US - California",
+      "url": "https://wxradio.org/CA-MontereyMarine-WWF64",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA marine weather broadcast."
+    },
+    {
+      "name": "Puget Sound Marine Weather WWG24",
+      "category": "Marine / VHF",
+      "region": "US - Washington",
+      "url": "https://wxradio.bobc.io/stream/WWG24",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA marine weather radio."
+    },
+    {
+      "name": "IJmuiden VHF Marine Ch 16/61/67/12/74 (Broadcastify)",
+      "category": "Marine / VHF",
+      "region": "Netherlands",
+      "url": "https://www.broadcastify.com/listen/feed/35475",
+      "type": "web",
+      "notes": "Dutch port & SAR channels. Web player."
+    },
+    {
+      "name": "MarineTraffic live map",
+      "category": "Marine / VHF",
+      "region": "Worldwide",
+      "url": "https://www.marinetraffic.com/",
+      "type": "web",
+      "notes": "Ship positions (useful alongside VHF)."
+    },
+    {
+      "name": "NAVTEX 518 kHz (WebSDR Twente)",
+      "category": "Marine / VHF",
+      "region": "North Sea",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=518cw",
+      "type": "web",
+      "notes": "Marine safety data broadcasts."
+    },
+    {
+      "name": "Nantucket Marine Channel 16 (Broadcastify)",
+      "category": "Marine / VHF",
+      "region": "US - Massachusetts",
+      "url": "https://www.broadcastify.com/listen/feed/47626",
+      "type": "web",
+      "notes": "VHF Ch 16/13/9/14. Web player."
+    },
+    {
+      "name": "USCG Long Island Sound Ch 16 (Broadcastify)",
+      "category": "Marine / VHF",
+      "region": "US - New York",
+      "url": "https://www.broadcastify.com/listen/feed/45734",
+      "type": "web",
+      "notes": "Coast Guard VHF channel 16. Web player."
+    },
+    {
+      "name": "SomaFM Mission Control",
+      "category": "Space",
+      "region": "US",
+      "url": "https://ice2.somafm.com/missioncontrol-128-mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Ambient music mixed with live/archived NASA mission audio."
+    },
+    {
+      "name": "Third Rock Radio (NASA partner)",
+      "category": "Space",
+      "region": "US",
+      "url": "https://rfcm.streamguys1.com/thirdrock-mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NASA-partnered station, space news & rock."
+    },
+    {
+      "name": "*SPACE* ISS / Mission audio relay",
+      "category": "Space",
+      "region": "US",
+      "url": "https://space.rfnet.link/",
+      "type": "web",
+      "notes": "Amateur RoIP relay of ISS public audio channel; daily recordings."
+    },
+    {
+      "name": "AMSAT - amateur satellites",
+      "category": "Space",
+      "region": "Worldwide",
+      "url": "https://www.amsat.org/",
+      "type": "web",
+      "notes": "Amateur satellite info & pass predictions."
+    },
+    {
+      "name": "ARISS - ISS ham radio contacts",
+      "category": "Space",
+      "region": "Worldwide",
+      "url": "https://www.ariss.org/",
+      "type": "web",
+      "notes": "Schedules of school contacts with ISS astronauts via ham radio."
+    },
+    {
+      "name": "NASA Live schedule",
+      "category": "Space",
+      "region": "US",
+      "url": "https://www.nasa.gov/live/",
+      "type": "web",
+      "notes": "Official NASA live events & ISS views."
+    },
+    {
+      "name": "SatNOGS - satellite ground station network",
+      "category": "Space",
+      "region": "Worldwide",
+      "url": "https://network.satnogs.org/",
+      "type": "web",
+      "notes": "Recorded satellite passes with audio/waterfalls."
+    },
+    {
+      "name": "Kamloops Fire Rescue",
+      "category": "Public safety",
+      "region": "Canada - BC",
+      "url": "https://icecast0.scanbc.com/kamloops",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "ScanBC feed."
+    },
+    {
+      "name": "Perth Fire & Rescue Command",
+      "category": "Public safety",
+      "region": "Australia - Perth",
+      "url": "https://stream.warsug.info/WARSUG",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Fire scanner (WARSUG)."
+    },
+    {
+      "name": "SomaFM SF 10-33 (ambient + scanner)",
+      "category": "Public safety",
+      "region": "US - San Francisco",
+      "url": "https://ice6.somafm.com/sf1033-128-mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Ambient music mixed with SF police/fire scanner."
+    },
+    {
+      "name": "SomaFM SF Police Scanner",
+      "category": "Public safety",
+      "region": "US - San Francisco",
+      "url": "https://ice6.somafm.com/scanner-128-mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Live San Francisco police scanner."
+    },
+    {
+      "name": "Taiwan Police Broadcasting - National Traffic & Safety",
+      "category": "Public safety",
+      "region": "Taiwan",
+      "url": "https://stream.pbs.gov.tw/live/PBS/playlist.m3u8",
+      "type": "stream",
+      "codec": "AAC",
+      "notes": "Police Broadcasting Service (broadcast)."
+    },
+    {
+      "name": "Travis County Police",
+      "category": "Public safety",
+      "region": "US - Texas",
+      "url": "http://audio1.radioreference.com/907330774",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Legacy RadioReference URL."
+    },
+    {
+      "name": "ZT Dispatch 7500 Repeater",
+      "category": "Public safety",
+      "region": "US",
+      "url": "http://philipiptv.cloudns.ph:8082/ZTSCANNER",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Community repeater scanner."
+    },
+    {
+      "name": "Broadcastify - Top 50 feeds",
+      "category": "Public safety",
+      "region": "Worldwide",
+      "url": "https://www.broadcastify.com/listen/top/",
+      "type": "web",
+      "notes": "Most listened scanner feeds right now."
+    },
+    {
+      "name": "Buffalo Police, Fire & EMS (Broadcastify)",
+      "category": "Public safety",
+      "region": "US - New York",
+      "url": "https://www.broadcastify.com/listen/feed/26933",
+      "type": "web",
+      "notes": "Broadcastify web player."
+    },
+    {
+      "name": "Cleveland Police (Broadcastify)",
+      "category": "Public safety",
+      "region": "US - Ohio",
+      "url": "https://www.broadcastify.com/listen/feed/11446",
+      "type": "web",
+      "notes": "Broadcastify web player."
+    },
+    {
+      "name": "Detroit Police Dispatch (Broadcastify)",
+      "category": "Public safety",
+      "region": "US - Michigan",
+      "url": "https://www.broadcastify.com/listen/feed/13671",
+      "type": "web",
+      "notes": "Broadcastify web player."
+    },
+    {
+      "name": "Indianapolis Metropolitan Police (Broadcastify)",
+      "category": "Public safety",
+      "region": "US - Indiana",
+      "url": "https://www.broadcastify.com/listen/feed/32602",
+      "type": "web",
+      "notes": "Broadcastify web player."
+    },
+    {
+      "name": "Pittsburgh Police, Fire & EMS (Broadcastify)",
+      "category": "Public safety",
+      "region": "US - Pennsylvania",
+      "url": "https://www.broadcastify.com/listen/feed/21738",
+      "type": "web",
+      "notes": "Broadcastify web player."
+    },
+    {
+      "name": "Sacramento Sheriff & Police (Broadcastify)",
+      "category": "Public safety",
+      "region": "US - California",
+      "url": "https://www.broadcastify.com/listen/feed/5688",
+      "type": "web",
+      "notes": "Broadcastify web player."
+    },
+    {
+      "name": "GeminiDX",
+      "category": "Amateur / ham",
+      "region": "UK",
+      "url": "https://s4.radio.co/s5907ff6bd/listen",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Ham radio news & music."
+    },
+    {
+      "name": "Morse code practice 15 WPM (morseops)",
+      "category": "Amateur / ham",
+      "region": "US",
+      "url": "https://stream.morseops.com/15wpm.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Continuous CW practice stream."
+    },
+    {
+      "name": "Morse code practice 20 WPM (morseops)",
+      "category": "Amateur / ham",
+      "region": "US",
+      "url": "https://stream.morseops.com/20wpm.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Continuous CW practice stream."
+    },
+    {
+      "name": "Morse code practice 25 WPM (morseops)",
+      "category": "Amateur / ham",
+      "region": "US",
+      "url": "https://stream.morseops.com/25wpm.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Continuous CW practice stream."
+    },
+    {
+      "name": "Morse code practice 30 WPM (morseops)",
+      "category": "Amateur / ham",
+      "region": "US",
+      "url": "https://stream.morseops.com/30wpm.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Continuous CW practice stream."
+    },
+    {
+      "name": "Broadcastify - Amateur radio feeds",
+      "category": "Amateur / ham",
+      "region": "Worldwide",
+      "url": "https://www.broadcastify.com/listen/top/",
+      "type": "web",
+      "notes": "Filter by Amateur Radio genre."
+    },
+    {
+      "name": "KiwiSDR / WebSDR receiver map",
+      "category": "Amateur / ham",
+      "region": "Worldwide",
+      "url": "http://rx.linkfanel.net/",
+      "type": "web",
+      "notes": "Map of hundreds of web-based receivers worldwide."
+    },
+    {
+      "name": "WebSDR Twente (whole HF band 0-29 MHz)",
+      "category": "Amateur / ham",
+      "region": "Netherlands",
+      "url": "http://websdr.ewi.utwente.nl:8901/",
+      "type": "web",
+      "notes": "Tune anywhere on shortwave in your browser."
+    },
+    {
+      "name": "WebSDR Twente - 40m ham band",
+      "category": "Amateur / ham",
+      "region": "Netherlands",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=7150lsb",
+      "type": "web",
+      "notes": "40 metre amateur band, voice."
+    },
+    {
+      "name": "WebSDR Twente - 80m ham band (evening nets)",
+      "category": "Amateur / ham",
+      "region": "Netherlands",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=3700lsb",
+      "type": "web",
+      "notes": "80 metre amateur band, voice nets."
+    },
+    {
+      "name": "WebSDR.org - list of WebSDRs",
+      "category": "Amateur / ham",
+      "region": "Worldwide",
+      "url": "http://websdr.org/",
+      "type": "web",
+      "notes": "Directory of WebSDR receivers."
+    },
+    {
+      "name": "NOAA KEC49 Monterey",
+      "category": "Weather",
+      "region": "US - California",
+      "url": "https://wxradio.org/CA-Monterey-KEC49",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA KEC56 Dallas",
+      "category": "Weather",
+      "region": "US - Texas",
+      "url": "https://wxradio.org/TX-Dallas-KEC56",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA KEC74 Indianapolis",
+      "category": "Weather",
+      "region": "US - Indiana",
+      "url": "http://wxradio.org:8000/IN-Indianapolis-KEC74",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA KHB36 Manassas 162.550",
+      "category": "Weather",
+      "region": "US - Virginia",
+      "url": "http://stream.mikev.com/khb36.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA KHB60 Seattle",
+      "category": "Weather",
+      "region": "US - Washington",
+      "url": "https://wxradio.bobc.io/stream/KHB60",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA KWO35 New York City",
+      "category": "Weather",
+      "region": "US - New York",
+      "url": "https://wxradio.org/NY-NewYorkCity-KWO35",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WNG589 Altoona",
+      "category": "Weather",
+      "region": "US - Pennsylvania",
+      "url": "http://streams.prosaic-expressions.com/wng589.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WNG654 Stillwater",
+      "category": "Weather",
+      "region": "US - Oklahoma",
+      "url": "https://wxradio.org/OK-Stillwater-WNG654",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WWG20 Fernley",
+      "category": "Weather",
+      "region": "US - Nevada",
+      "url": "https://web.rollernet.us:8443/WWG20",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WWG57 Mansfield 162.450",
+      "category": "Weather",
+      "region": "US - Ohio",
+      "url": "https://wxradio.org/OH-Mansfield-WWG57",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WXJ71 Peoria 162.475",
+      "category": "Weather",
+      "region": "US - Illinois",
+      "url": "https://wxradio.org/IL-Peoria-WXJ71",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WXK49 Memphis",
+      "category": "Weather",
+      "region": "US - Tennessee",
+      "url": "https://usa10.fastcast4u.com:3210/1",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WXK58 Reno",
+      "category": "Weather",
+      "region": "US - Nevada",
+      "url": "https://web.rollernet.us:8443/WXK58",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "NOAA WZ2523 Frankfort",
+      "category": "Weather",
+      "region": "US - Kentucky",
+      "url": "https://wxradio.org/KY-Frankfort-WZ2523",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "NOAA Weather Radio rebroadcast."
+    },
+    {
+      "name": "Shanghai Weather Radio",
+      "category": "Weather",
+      "region": "China",
+      "url": "https://lhttp.qtfm.cn/live/20500176/64k.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Weather information station."
+    },
+    {
+      "name": "wxradio.org - all NOAA weather streams",
+      "category": "Weather",
+      "region": "US",
+      "url": "https://wxradio.org/",
+      "type": "web",
+      "notes": "Directory of NOAA Weather Radio streams."
+    },
+    {
+      "name": "Impact AM (shortwave/AM pirate-style)",
+      "category": "Numbers / shortwave / utility",
+      "region": "Netherlands",
+      "url": "http://kippingmultimediaal.nl:8000/impactweb",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Dutch AM/shortwave station."
+    },
+    {
+      "name": "Radio Rebelde (5025 kHz SW)",
+      "category": "Numbers / shortwave / utility",
+      "region": "Cuba",
+      "url": "https://securestreams7.autopo.st/?uri=https://icecast.teveo.cu/kHKL7tWd",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Cuban station also on shortwave."
+    },
+    {
+      "name": "WBCQ The Planet",
+      "category": "Numbers / shortwave / utility",
+      "region": "US - Maine",
+      "url": "http://splatterbox.us/wbcq1",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Shortwave broadcaster simulcast."
+    },
+    {
+      "name": "WINB Shortwave Red Lion",
+      "category": "Numbers / shortwave / utility",
+      "region": "US - Pennsylvania",
+      "url": "http://winb.mntts.com:82/broadwave.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Shortwave broadcaster simulcast."
+    },
+    {
+      "name": "WRMI 9955 Shortwave",
+      "category": "Numbers / shortwave / utility",
+      "region": "US - Florida",
+      "url": "http://wrmi.listen.creek.fm/stream",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Shortwave broadcaster simulcast."
+    },
+    {
+      "name": "WWCR Shortwave Nashville",
+      "category": "Numbers / shortwave / utility",
+      "region": "US - Tennessee",
+      "url": "http://wwcr.gsradio.net:3763/;.mp3",
+      "type": "stream",
+      "codec": "MP3",
+      "notes": "Shortwave broadcaster simulcast."
+    },
+    {
+      "name": "Priyom.org - numbers station schedules",
+      "category": "Numbers / shortwave / utility",
+      "region": "Worldwide",
+      "url": "https://priyom.org/",
+      "type": "web",
+      "notes": "Schedules to tune numbers stations on WebSDR."
+    },
+    {
+      "name": "Short-wave.info schedules",
+      "category": "Numbers / shortwave / utility",
+      "region": "Worldwide",
+      "url": "https://www.short-wave.info/",
+      "type": "web",
+      "notes": "What is on shortwave now."
+    },
+    {
+      "name": "UVB-76 \"The Buzzer\" 4625 kHz (WebSDR Twente)",
+      "category": "Numbers / shortwave / utility",
+      "region": "Russia",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=4625usb",
+      "type": "web",
+      "notes": "The famous Russian buzzer station."
+    },
+    {
+      "name": "WWV time signal 10 MHz (WebSDR Twente)",
+      "category": "Numbers / shortwave / utility",
+      "region": "US",
+      "url": "http://websdr.ewi.utwente.nl:8901/?tune=10000am",
+      "type": "web",
+      "notes": "NIST time signal (reception varies)."
+    }
+  ]
+}

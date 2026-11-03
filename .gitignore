@@ -1,0 +1,23 @@
+# Build output
+bin/
+obj/
+publish/
+out/
+x/
+*.zip
+*.7z
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Local scratch (feed research; contains third-party stream URLs not for publishing)
+research/
+
+# Runtime files that should never be committed
+*.log
+*.bad
+*.tmp
