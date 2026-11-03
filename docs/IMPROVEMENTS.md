@@ -103,7 +103,7 @@ When Music is redirected to OneDrive or another drive, which is common on Window
 ### M5. Radio Browser usage does not follow the API's guidance
 `Services/RadioBrowserClient.cs:14-18, 26`.
 - **Server discovery:** the servers are hard-coded (`de1`, `de2`). Radio Browser asks clients to discover mirrors through DNS (`_api._tcp.radio-browser.info` SRV records, or the A records of `all.api.radio-browser.info`) or via `https://all.api.radio-browser.info/json/servers`, then pick one at random. When checked on 3 Nov 2026, `/json/servers` listed only `de1`. **Fix:** on startup, fetch `/json/servers`, shuffle it, and cache it in settings with a timestamp. Keep `de1`/`de2` only as a last-resort fallback.
-- **User-Agent:** the API asks for a descriptive one. `MightyRadio/1.0` has no contact or URL. **Fix:** use `MightyRadio/<assembly version> (+https://github.com/<owner>/mighty-radio)` and take the version from the assembly so it can't go stale.
+- **User-Agent:** the API asks for a descriptive one. `MightyRadio/1.0` has no contact or URL. **Fix:** use `MightyRadio/<assembly version> (+https://github.com/florence-experiments/mighty-radio)` and take the version from the assembly so it can't go stale.
 - **Compression:** use `new HttpClient(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All, PooledConnectionLifetime = TimeSpan.FromMinutes(5) })`. JSON responses for 300 stations compress about 10x, and the connection lifetime picks up DNS changes.
 - **Click reporting:** `ReportClick` (`:91-104`) fires on every Play press, including retries of the same station. Report at most once per station per session.
 
@@ -254,7 +254,7 @@ Favouriting one of these entries marks all three as favourites. **Fix:** key on
 11. **Auto-reconnect and buffering setting.** See M7. Expose `--network-caching` (currently fixed at 2000 ms)
     as Normal / Patchy Wi-Fi (5000 ms).
 12. **Auto-update check (opt-in).** On request, or weekly if enabled, call the GitHub Releases API
-    (`/repos/<owner>/mighty-radio/releases/latest`), compare with the assembly version, and open the release
+    (`/repos/florence-experiments/mighty-radio/releases/latest`), compare with the assembly version, and open the release
     page. Do not self-replace files. Keep it off by default to honour the "no telemetry" line in the README,
     and say exactly what is contacted.
 13. **Code signing.** The README tells users to click past SmartScreen. Options include Azure Trusted Signing,

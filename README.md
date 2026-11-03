@@ -71,7 +71,7 @@ Requirements: the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 the app. Building on Linux or macOS also works because the project sets `EnableWindowsTargeting`.
 
 ```powershell
-git clone https://github.com/<owner>/mighty-radio.git
+git clone https://github.com/florence-experiments/mighty-radio.git
 cd mighty-radio
 dotnet build MightyRadio/MightyRadio.csproj -c Release
 
