@@ -9,6 +9,7 @@
     <!-- Wide scroll bars (about 3x the Windows default of 17 px) with a long, easy-to-grab thumb -->
     <sys:Double x:Key="ScrollBarSize">48</sys:Double>
     <sys:Double x:Key="ScrollThumbMinLength">64</sys:Double>
+    <GridLength x:Key="ScrollBarGridLength">48</GridLength>
     <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">48</sys:Double>
     <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">48</sys:Double>
 
@@ -346,9 +347,9 @@
         <Border Background="{TemplateBinding Background}" CornerRadius="{DynamicResource ControlCorner}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="{StaticResource ScrollBarSize}"/>
+                    <RowDefinition Height="{StaticResource ScrollBarGridLength}"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="{StaticResource ScrollBarSize}"/>
+                    <RowDefinition Height="{StaticResource ScrollBarGridLength}"/>
                 </Grid.RowDefinitions>
                 <RepeatButton Style="{StaticResource ScrollArrowButton}" Command="ScrollBar.LineUpCommand" AutomationProperties.Name="Scroll up">
                     <Path Data="M0,8 L8,0 L16,8" Stroke="{DynamicResource SubtleTextBrush}" StrokeThickness="2.5"/>
@@ -375,9 +376,9 @@
         <Border Background="{TemplateBinding Background}" CornerRadius="{DynamicResource ControlCorner}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{StaticResource ScrollBarSize}"/>
+                    <ColumnDefinition Width="{StaticResource ScrollBarGridLength}"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="{StaticResource ScrollBarSize}"/>
+                    <ColumnDefinition Width="{StaticResource ScrollBarGridLength}"/>
                 </Grid.ColumnDefinitions>
                 <RepeatButton Style="{StaticResource ScrollArrowButton}" Command="ScrollBar.LineLeftCommand" AutomationProperties.Name="Scroll left">
                     <Path Data="M8,0 L0,8 L8,16" Stroke="{DynamicResource SubtleTextBrush}" StrokeThickness="2.5"/>

@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Markup;
 using System.Windows.Threading;
 using LibVLCSharp.Shared;
 using MightyRadio.Services;
@@ -14,12 +16,19 @@ public partial class App : Application
     private EventWaitHandle? _activateEvent;
     private RegisteredWaitHandle? _activateWait;
     private DateTime _lastErrorBox = DateTime.MinValue;
+    private const string SafeModeArg = "--safe-mode";
+    private bool _safeMode;           // restarted after a failed start: Dark theme, no second restart
+    private bool _startupComplete;    // the main window has drawn once
+    private bool _startupFailed;
+    private bool _restartInSafeMode;
+    private bool _themeFallbackDone;
 
     public LibVLC? Vlc { get; private set; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        _safeMode = e.Args.Any(a => string.Equals(a, SafeModeArg, StringComparison.OrdinalIgnoreCase));
 
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += (_, a) => Storage.Log(a.ExceptionObject as Exception, "Unhandled (domain)");
@@ -58,8 +67,23 @@ public partial class App : Application
         catch (Exception ex) { Storage.Log(ex, "Single-instance activation event"); }
 
         var settings = Storage.LoadSettings();
-        try { ThemeManager.Apply(settings.Theme); }
+        if (_safeMode) settings.Theme = ThemeManager.FallbackId;
+        // Checks the theme off-screen first, so a broken palette or style falls back to Dark instead of
+        // failing halfway through drawing the window.
+        string? themeNotice = null;
+        try
+        {
+            themeNotice = ThemeManager.ApplyAtStartup(settings.Theme);
+            if (themeNotice != null || _safeMode)
+            {
+                settings.Theme = ThemeManager.Current;
+                Storage.SaveSettings(settings);
+            }
+        }
         catch (Exception ex) { Storage.Log(ex, "Applying theme"); }
+        if (_safeMode)
+            themeNotice = "Mighty Radio restarted with the Dark theme after a problem opening its window. " +
+                          "Details are in " + Storage.LogPath + ".";
 
         try
         {
@@ -85,6 +109,8 @@ public partial class App : Application
         {
             var window = new MainWindow(Vlc, settings);
             MainWindow = window;
+            window.ContentRendered += (_, _) => _startupComplete = true;
+            if (themeNotice != null) window.ShowNotice(themeNotice, isError: true);
             window.Show();
         }
         catch (Exception ex)
@@ -98,15 +124,51 @@ public partial class App : Application
         }
     }
 
+    /// <summary>
+    /// True when the exception came from building or laying out controls (a bad style, template or resource).
+    /// WPF abandons the layout pass when that happens, so the window is left half-drawn: carrying on would show
+    /// overlapping, partly-updated controls rather than a working app.
+    /// </summary>
+    private static bool IsLayoutFailure(Exception ex)
+    {
+        for (var x = ex; x != null; x = x.InnerException)
+        {
+            if (x is XamlParseException) return true;
+            var st = x.StackTrace ?? "";
+            if (st.Contains("System.Windows.UIElement.Measure") || st.Contains("System.Windows.UIElement.Arrange") ||
+                st.Contains("System.Windows.FrameworkElement.ApplyTemplate") || st.Contains("System.Windows.ContextLayoutManager") ||
+                st.Contains("System.Windows.FrameworkTemplate"))
+                return true;
+        }
+        return false;
+    }
+
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        Storage.Log(e.Exception, "Unhandled (UI)");
         e.Handled = true; // keep running - a radio should never just vanish
-        if (MainWindow == null || !MainWindow.IsLoaded)
+        if (_startupFailed) return; // already closing down; ignore the echoes
+        Storage.Log(e.Exception, "Unhandled (UI)");
+        if (MainWindow == null)
         {
             // Failure before the window exists: don't linger invisibly.
             Shutdown(1);
             return;
+        }
+        if (IsLayoutFailure(e.Exception))
+        {
+            if (!_startupComplete) { FailStartup(e.Exception); return; }
+            if (!_themeFallbackDone && ThemeManager.Current != ThemeManager.FallbackId)
+            {
+                // A theme that broke after start-up: drop back to Dark once, then carry on as usual.
+                _themeFallbackDone = true;
+                var broken = ThemeManager.Name(ThemeManager.Current);
+                Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                {
+                    if (ThemeManager.TryApply(ThemeManager.FallbackId) == null && MainWindow is MainWindow w)
+                        w.ShowNotice($"The {broken} theme hit a problem, so Mighty Radio switched to Dark. Details are in {Storage.LogPath}.", isError: true);
+                });
+                return;
+            }
         }
         // A repeating error (e.g. in a binding) must not produce an endless stream of message boxes.
         if (DateTime.UtcNow - _lastErrorBox < TimeSpan.FromSeconds(30)) return;
@@ -117,6 +179,34 @@ public partial class App : Application
                 "Mighty Radio", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         catch { }
+    }
+
+    /// <summary>
+    /// The window failed while being built. Hide it at once (no half-drawn second layout on screen), explain,
+    /// then exit and start again once with the Dark theme. A failure in that safe-mode start just exits.
+    /// </summary>
+    private void FailStartup(Exception ex)
+    {
+        _startupFailed = true;
+        Storage.Log(ex, _safeMode ? "Window failed to build (safe mode)" : "Window failed to build; restarting with the Dark theme");
+        try { MainWindow?.Hide(); } catch { }
+        Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+        {
+            var restart = !_safeMode;
+            try
+            {
+                MessageBox.Show(
+                    (restart
+                        ? "Mighty Radio hit a problem while opening its window, so it will close and restart with the Dark theme.\n\n"
+                        : "Mighty Radio couldn't open its window, even with the Dark theme.\n\n") +
+                    ex.Message + "\n\nDetails were saved to " + Storage.LogPath,
+                    "Mighty Radio", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch { }
+            _restartInSafeMode = restart;
+            if (MainWindow is MainWindow w) w.RequestExit();
+            else Shutdown(1);
+        });
     }
 
     /// <summary>Called by the main window after it has stopped playback and recordings.</summary>
@@ -138,6 +228,19 @@ public partial class App : Application
         _activateEvent?.Dispose();
         try { _singleInstance?.ReleaseMutex(); } catch { }
         _singleInstance?.Dispose();
+        _singleInstance = null;
+        if (_restartInSafeMode)
+        {
+            try
+            {
+                var s = Storage.LoadSettings();
+                s.Theme = ThemeManager.FallbackId;
+                Storage.SaveSettings(s);
+                if (Environment.ProcessPath is { } exe)
+                    Process.Start(new ProcessStartInfo(exe, SafeModeArg) { UseShellExecute = false });
+            }
+            catch (Exception ex) { Storage.Log(ex, "Restarting in safe mode"); }
+        }
         base.OnExit(e);
     }
 }

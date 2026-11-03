@@ -21,7 +21,7 @@
     <Description>Mighty Radio - simple internet radio and scanner player</Description>
     <Company>Mighty Radio</Company>
     <Copyright>Copyright (c) 2026 florence-experiments. MIT licence.</Copyright>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationIcon>Assets\MightyRadio.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -81,4 +81,10 @@
     <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.24" />
   </ItemGroup>
 
+  <!-- Catches wrong-typed or missing XAML resources (they compile but fail at runtime). Needs Python 3;
+       runs on the Linux/macOS release box. Skip with -p:SkipXamlCheck=true. -->
+  <Target Name="CheckXamlResources" BeforeTargets="BeforeBuild"
+          Condition="'$(OS)' != 'Windows_NT' And '$(SkipXamlCheck)' != 'true'">
+    <Exec Command="python3 &quot;$(MSBuildProjectDirectory)/../tools/check-xaml-resources.py&quot; &quot;$(MSBuildProjectDirectory)&quot;" />
+  </Target>
 </Project>

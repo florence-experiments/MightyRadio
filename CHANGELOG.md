@@ -2,6 +2,26 @@
 
 All notable changes to Mighty Radio. Dates are UK time.
 
+## 1.1.1 – 2026-11-03
+
+### Fixed
+- **Window didn't finish opening** ("'48' is not a valid value for property 'Height'"): the wide scroll bar
+  template gave its arrow rows and columns a plain number where WPF needs a grid length. Every scroll bar
+  failed to build, so the first layout pass was abandoned: the window was half drawn, the station search never
+  started ("Searching for stations…" stayed up), and maximising showed old and new layout overlapping.
+- A failure while the window is being built is no longer shrugged off with "Oops… will keep going". Mighty Radio
+  now hides the broken window, explains, and restarts once with the Dark theme (`--safe-mode`); details go to
+  `error.log`.
+
+### Improved
+- Themes are checked before use: the palette must have the same keys and value types as Dark, and one of
+  each styled control is built off-screen. A failing theme at start-up falls back to Dark with a message; a
+  failing theme picked in Settings is refused and the current one stays.
+- New `tools/check-xaml-resources.py`, run automatically by non-Windows builds: checks every resource
+  reference in the XAML for missing keys, wrong value types (for example a number where a grid length,
+  thickness, corner radius or brush is needed), theme keys missing from one palette, StaticResource on a
+  theme key, use-before-definition, template/style type mismatches and keys used from C#.
+
 ## 1.1.0 – 2026-11-03
 
 ### New

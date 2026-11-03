@@ -1044,18 +1044,29 @@ public partial class MainWindow : Window
     private void ThemeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_suppressUiEvents || (sender as ComboBox)?.SelectedItem is not ThemeOption opt) return;
-        try
+        // TryApply checks the theme off-screen and keeps the current one if it fails.
+        var problem = ThemeManager.TryApply(opt.Id);
+        if (problem == null)
         {
-            ThemeManager.Apply(opt.Id);
             _settings.Theme = ThemeManager.Current;
             Storage.SaveSettings(_settings);
         }
-        catch (Exception ex)
+        else
         {
-            Storage.Log(ex, "Apply theme");
-            ShowMessage("Sorry, that theme couldn't be loaded.", isError: true);
+            ShowMessage($"Sorry, the {opt.Name} theme couldn't be loaded, so the {ThemeManager.Name(ThemeManager.Current)} theme is still in use. " +
+                        $"Details are in {Storage.LogPath}.", isError: true);
         }
         SelectThemeInBoxes(ThemeManager.Current);
+    }
+
+    /// <summary>A message in the now-playing panel, for App (e.g. a theme fallback at start-up).</summary>
+    public void ShowNotice(string text, bool isError) => ShowMessage(text, isError);
+
+    /// <summary>Exit for real (not to the tray), going through the normal shutdown that stops VLC.</summary>
+    public void RequestExit()
+    {
+        _exitRequested = true;
+        Close();
     }
 
     private void TrayBox_Changed(object sender, RoutedEventArgs e)

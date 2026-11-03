@@ -44,7 +44,7 @@ Choose a theme from the drop-down at the top right, or under **Settings**. It ch
 
 ## Download and run
 
-1. Download `MightyRadio-v1.1-win-x64.zip` from the [Releases](https://github.com/florence-experiments/MightyRadio/releases) page and unzip it.
+1. Download `MightyRadio-v1.1.1-win-x64.zip` from the [Releases](https://github.com/florence-experiments/MightyRadio/releases) page and unzip it.
 2. Keep the whole `MightyRadio` folder together. Do not move `MightyRadio.exe` out of it, because it needs the `libvlc` folder next to it.
 3. Double-click `MightyRadio.exe`.
 4. The first time, Windows may show "Windows protected your PC" (SmartScreen) because the app isn't code-signed. Click **More info**, then **Run anyway**.
@@ -129,6 +129,10 @@ The VLC engine comes from the `VideoLAN.LibVLC.Windows` NuGet package and is cop
 `publish/MightyRadio/libvlc/win-x64/`. Only the audio plugins listed in `MightyRadio.csproj`
 (`VlcWindowsX64IncludeFiles`) are included; delete that `ItemGroup` to ship the full engine.
 
+Before changing any XAML, run `python3 tools/check-xaml-resources.py`. It finds resource mistakes that compile
+but break at runtime (a missing key, or a number where a grid length, thickness or brush is needed). Builds on
+Linux and macOS run it automatically; skip it with `-p:SkipXamlCheck=true`.
+
 Project layout:
 
 ```
@@ -146,7 +150,7 @@ MightyRadio/
     MediaControls.cs         media keys and the Windows media overlay (SMTC)
     TrayIcon.cs              notification-area icon (Win32 Shell_NotifyIcon)
     RecordingConsent.cs      the recording notice text and acceptance file
-    ThemeManager.cs          theme switching
+    ThemeManager.cs          theme switching (each theme is checked off-screen first)
     ScannerRepository.cs     loads stations-scanner.json
     Storage.cs               %APPDATA% JSON files, Music folder and error log
   Themes/                    Brass.xaml, Phosphor.xaml, Dark.xaml (colours) and Controls.xaml (control styles)
