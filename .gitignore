@@ -21,3 +21,6 @@ research/
 *.log
 *.bad
 *.tmp
+
+# Release artefacts (built locally, uploaded to GitHub Releases)
+release/

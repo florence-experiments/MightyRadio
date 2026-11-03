@@ -20,6 +20,8 @@ public sealed class Station
     [JsonPropertyName("tags")] public string Tags { get; set; } = "";
     [JsonPropertyName("votes")] public int Votes { get; set; }
     [JsonPropertyName("clickcount")] public int ClickCount { get; set; }
+    /// <summary>1 when Radio Browser has seen an HLS stream at this URL.</summary>
+    [JsonPropertyName("hls")] public int Hls { get; set; }
 
     // Mighty Radio extras (not part of Radio Browser; used for scanner feeds)
     /// <summary>"radio" (Radio Browser) or "scanner".</summary>
@@ -34,6 +36,9 @@ public sealed class Station
 
     [JsonIgnore]
     public string StreamUrl => !string.IsNullOrWhiteSpace(UrlResolved) ? UrlResolved.Trim() : (Url ?? "").Trim();
+
+    /// <summary>Copy with only the fields worth saving (favourites, schedules, settings).</summary>
+    public Station Clone() => (Station)MemberwiseClone();
 
     [JsonIgnore]
     public string DisplayName => string.IsNullOrWhiteSpace(Name) ? "(unnamed station)" : Name.Trim();

@@ -5,9 +5,10 @@ repository. The binary releases also bundle the components below, which keep the
 
 | Component | Version | Licence | Source |
 |---|---|---|---|
-| LibVLC (VideoLAN.LibVLC.Windows NuGet package: `libvlc.dll`, `libvlccore.dll`, `plugins/`, `lua/`, `hrtfs/`) | 3.0.24 | LGPL-2.1-or-later (package licence expression) | https://code.videolan.org/videolan/vlc (3.0.x branch), https://code.videolan.org/videolan/libvlc-nuget |
+| LibVLC (VideoLAN.LibVLC.Windows NuGet package: `libvlc.dll`, `libvlccore.dll` and an audio-only subset of `plugins/`) | 3.0.24 | LGPL-2.1-or-later (package licence expression) | https://code.videolan.org/videolan/vlc (3.0.x branch), https://code.videolan.org/videolan/libvlc-nuget |
 | LibVLCSharp | 3.10.2 | LGPL-2.1-or-later (package licence expression) | https://code.videolan.org/videolan/LibVLCSharp |
 | .NET 8 runtime and Windows Desktop runtime (self-contained publish) | 8.0.x | MIT (plus the runtime's own third-party notices) | https://github.com/dotnet/runtime, https://github.com/dotnet/wpf |
+| Windows SDK projection for .NET (`Microsoft.Windows.SDK.NET.dll`, `WinRT.Runtime.dll`, from the Microsoft.Windows.SDK.NET.Ref package, used for the Windows media overlay) | 10.0.19041.56 | Microsoft Windows SDK licence terms (https://aka.ms/WinSDKLicenseURL); C#/WinRT runtime is MIT | https://github.com/microsoft/CsWinRT |
 
 The licence expressions above come from the `<license>` element of each package's `.nuspec` in the local
 NuGet cache (`libvlcsharp/3.10.2`, `videolan.libvlc.windows/3.0.24`).
@@ -17,14 +18,18 @@ NuGet cache (`libvlcsharp/3.10.2`, `videolan.libvlc.windows/3.0.24`).
 - LibVLC and LibVLCSharp are loaded dynamically as separate DLLs (`PublishSingleFile` is `false`). Users can
   therefore replace them with their own builds, as the LGPL requires. Keep this arrangement. Merging them into
   a single-file or trimmed bundle needs a fresh licence review.
-- Ship the LGPL-2.1 text with each binary release. The full text is at
-  https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt; `COPYING.LIB` in the VLC source works too. Also
-  ship a pointer to the exact source versions listed above.
+- Ship the LGPL-2.1 text with each binary release. It is in `licenses/LGPL-2.1.txt` (from
+  https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt) and the build copies it, this file and `LICENSE`
+  into the release folder automatically. The exact source versions are listed above.
 - Some individual VLC plugins and the third-party libraries compiled into them have their own licences, and a
   few modules are GPL-2.0-or-later. Upstream builds list these in VLC's `COPYING` and `NEWS`/contrib notices.
-  If you prune the `plugins/` folder (see `docs/IMPROVEMENTS.md`, idea 15), keep only what you need. If any
-  GPL-only module stays in the bundle, the distributed bundle as a whole should be treated as GPL-compatible.
-  Mighty Radio's MIT code is compatible with that.
+  Since v1.1 the release ships only the audio plugins listed in `MightyRadio.csproj` (HTTP/HTTPS access,
+  GnuTLS, XML, playlist/HLS/DASH and audio demuxers, `avcodec`, `mpg123`, Vorbis, Opus, FLAC, Speex and raw
+  decoders, audio packetizers/filters/mixers/outputs, and the stream-dump, TS/Ogg mux and file output modules
+  used for recording). Video, subtitle, disc, visualisation, Lua and streaming-server modules are not shipped.
+  The licence of each remaining plugin has not been audited individually; if any GPL-only module is among them,
+  the distributed bundle as a whole should be treated as GPL-compatible. Mighty Radio's MIT code is compatible
+  with that.
 
 ## Data and services
 

@@ -4,10 +4,10 @@
         Title="Mighty Radio" Icon="Assets/MightyRadio.ico"
         Width="1040" Height="760" MinWidth="780" MinHeight="580"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource WindowBrush}" Foreground="{StaticResource TextBrush}"
+        Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}"
         FontFamily="Segoe UI" FontSize="15"
         TextOptions.TextFormattingMode="Display">
-    <Grid Margin="20,16,20,12">
+    <Grid Margin="20,14,20,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -16,75 +16,105 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <StackPanel Orientation="Horizontal" Margin="2,0,0,12">
-            <Image Source="Assets/MightyRadio.ico" Width="34" Height="34" Margin="0,0,10,0"/>
-            <TextBlock Text="Mighty Radio" FontSize="26" FontWeight="Bold" VerticalAlignment="Center"/>
-        </StackPanel>
+        <DockPanel Margin="2,0,0,10" LastChildFill="False">
+            <Image Source="Assets/MightyRadio.ico" Width="32" Height="32" Margin="0,0,10,0" DockPanel.Dock="Left"
+                   AutomationProperties.Name="Mighty Radio logo"/>
+            <TextBlock Text="Mighty Radio" FontSize="25" FontWeight="Bold" VerticalAlignment="Center" DockPanel.Dock="Left"/>
+            <Button x:Name="MiniButton" DockPanel.Dock="Right" Margin="0" Click="MiniButton_Click"
+                    ToolTip="Switch between the full window and a small always-on-top player"
+                    AutomationProperties.Name="Mini player">
+                <TextBlock x:Name="MiniButtonText" Text="Mini player"/>
+            </Button>
+            <ComboBox x:Name="QuickThemeBox" DockPanel.Dock="Right" Width="170" Margin="0,0,8,0"
+                      ToolTip="Theme" AutomationProperties.Name="Theme" SelectionChanged="ThemeBox_SelectionChanged"/>
+        </DockPanel>
 
         <!-- Now playing panel -->
-        <Border Grid.Row="1" Background="{StaticResource PanelBrush}" CornerRadius="12" Padding="20,16"
-                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+        <Border Grid.Row="1" Style="{StaticResource Panel}" Padding="16,14">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                    <TextBlock x:Name="StatusLabel" Text="READY" FontSize="12" FontWeight="Bold"
-                               Foreground="{StaticResource AccentBrush}"/>
-                    <TextBlock x:Name="StationNameText" Text="Choose a station below" FontSize="24" FontWeight="SemiBold"
-                               TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
-                    <TextBlock x:Name="NowPlayingText" Text="" FontSize="16" Foreground="{StaticResource SubtleTextBrush}"
-                               TextTrimming="CharacterEllipsis" Margin="0,4,0,0"/>
-                    <TextBlock x:Name="MessageText" Text="" FontSize="14" Foreground="{StaticResource ErrorBrush}"
-                               TextWrapping="Wrap" Margin="0,6,0,0" Visibility="Collapsed"/>
-                </StackPanel>
+                <!-- Readout -->
+                <Border Style="{StaticResource Readout}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock x:Name="StatusLabel" Text="READY" Style="{StaticResource ReadoutStatusText}"
+                                       AutomationProperties.LiveSetting="Polite" AutomationProperties.Name="Status"/>
+                            <TextBlock x:Name="StationNameText" Text="Choose a station below" FontSize="24" FontWeight="SemiBold"
+                                       Style="{StaticResource ReadoutText}" Margin="0,3,0,0"/>
+                            <TextBlock x:Name="NowPlayingText" Text="" FontSize="16" Style="{StaticResource ReadoutSubtleText}" Margin="0,4,0,0"
+                                       AutomationProperties.Name="Now playing"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <TextBlock x:Name="SleepStatusText" Text="" FontSize="13" Style="{StaticResource ReadoutStatusText}"
+                                       HorizontalAlignment="Right" Visibility="Collapsed"/>
+                            <TextBlock x:Name="ScheduleStatusText" Text="" FontSize="13" Style="{StaticResource ReadoutStatusText}"
+                                       HorizontalAlignment="Right" Margin="0,4,0,0" Visibility="Collapsed"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                <!-- Volume -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
-                    <TextBlock Text="Volume" Foreground="{StaticResource SubtleTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <Slider x:Name="VolumeSlider" Width="180" Minimum="0" Maximum="100" Value="70" VerticalAlignment="Center"
-                            IsMoveToPointEnabled="True" SmallChange="1" LargeChange="10"
-                            ValueChanged="VolumeSlider_ValueChanged"/>
-                    <TextBlock x:Name="VolumeText" Text="70" Width="34" TextAlignment="Right" VerticalAlignment="Center"
-                               Foreground="{StaticResource SubtleTextBrush}"/>
-                </StackPanel>
+                <TextBlock x:Name="MessageText" Grid.Row="1" Text="" FontSize="14" Foreground="{DynamicResource ErrorBrush}"
+                           TextWrapping="Wrap" Margin="2,8,0,0" Visibility="Collapsed"
+                           AutomationProperties.LiveSetting="Polite" AutomationProperties.Name="Message"/>
 
                 <!-- Main controls -->
-                <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,14,0,0">
-                    <Button x:Name="PlayButton" Style="{StaticResource AccentButton}" Click="PlayButton_Click" MinWidth="110"
-                            ToolTip="Play the station shown above">
-                        <TextBlock Text="▶  Play" Foreground="{StaticResource AccentTextBrush}"/>
-                    </Button>
-                    <Button x:Name="StopButton" Click="StopButton_Click" MinWidth="110" ToolTip="Stop playing">
-                        <TextBlock Text="■  Stop"/>
-                    </Button>
-                    <Button x:Name="RecordButton" Click="RecordButton_Click" MinWidth="150"
-                            ToolTip="Save what you are hearing to Music\MightyRadio">
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse x:Name="RecordDot" Width="12" Height="12" Fill="{StaticResource RecordBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="RecordButtonText" Text="Record"/>
+                <Grid Grid.Row="2" Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel>
+                        <Button x:Name="PlayButton" Style="{StaticResource AccentButton}" Click="PlayButton_Click" MinWidth="104"
+                                ToolTip="Play the station shown above" AutomationProperties.Name="Play" Margin="0,0,8,6">
+                            <TextBlock Text="▶  Play"/>
+                        </Button>
+                        <Button x:Name="StopButton" Click="StopButton_Click" MinWidth="104" ToolTip="Stop playing"
+                                AutomationProperties.Name="Stop" Margin="0,0,8,6">
+                            <TextBlock Text="■  Stop"/>
+                        </Button>
+                        <Button x:Name="RecordButton" Click="RecordButton_Click" MinWidth="150" Margin="0,0,8,6"
+                                ToolTip="Save what you are hearing to your Music\MightyRadio folder" AutomationProperties.Name="Record">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse x:Name="RecordDot" Width="12" Height="12" Fill="{DynamicResource RecordBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="RecordButtonText" Text="Record"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="FavouriteButton" Click="FavouriteButton_Click" MinWidth="180" Margin="0,0,8,6"
+                                ToolTip="Add or remove this station from your favourites" AutomationProperties.Name="Add to favourites">
+                            <TextBlock x:Name="FavouriteButtonText" Text="☆  Add to favourites"/>
+                        </Button>
+                        <ComboBox x:Name="SleepBox" Width="160" Margin="0,0,8,6" ToolTip="Sleep timer: fade out and stop after a while"
+                                  AutomationProperties.Name="Sleep timer" SelectionChanged="SleepBox_SelectionChanged"/>
+                        <StackPanel x:Name="SleepCustomPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,0,8,6">
+                            <TextBox x:Name="SleepCustomBox" Width="70" Text="40" AutomationProperties.Name="Sleep minutes"
+                                     KeyDown="SleepCustomBox_KeyDown" ToolTip="Minutes (1 to 720)"/>
+                            <Button Click="SleepCustomSet_Click" Margin="6,0,0,0" Content="Set" AutomationProperties.Name="Start sleep timer"/>
                         </StackPanel>
-                    </Button>
-                    <Button x:Name="FavouriteButton" Click="FavouriteButton_Click" MinWidth="190"
-                            ToolTip="Add or remove this station from your favourites">
-                        <TextBlock x:Name="FavouriteButtonText" Text="☆  Add to favourites"/>
-                    </Button>
-                    <Button x:Name="OpenRecordingsButton" Click="OpenRecordingsButton_Click"
-                            ToolTip="Open the folder where recordings are saved">
-                        <TextBlock Text="Recordings folder"/>
-                    </Button>
-                </WrapPanel>
+                    </WrapPanel>
+                    <!-- Volume -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="8,4,0,0">
+                        <TextBlock Text="Volume" Foreground="{DynamicResource SubtleTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <Slider x:Name="VolumeSlider" Width="170" Minimum="0" Maximum="100" Value="70" VerticalAlignment="Center"
+                                IsMoveToPointEnabled="True" SmallChange="1" LargeChange="10" AutomationProperties.Name="Volume"
+                                ValueChanged="VolumeSlider_ValueChanged"/>
+                        <TextBlock x:Name="VolumeText" Text="70" Width="34" TextAlignment="Right" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource SubtleTextBrush}"/>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Border>
 
         <!-- Tabs -->
-        <TabControl x:Name="Tabs" Grid.Row="2" Margin="0,14,0,0">
+        <TabControl x:Name="Tabs" Grid.Row="2" Margin="0,12,0,0" SelectionChanged="Tabs_SelectionChanged">
 
             <!-- Radio stations -->
             <TabItem Header="Radio stations">
@@ -104,43 +134,39 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,10,0">
                             <TextBlock Text="Station name" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="NameBox" KeyDown="SearchBox_KeyDown" ToolTip="Part of the station name, e.g. BBC"/>
+                            <TextBox x:Name="NameBox" KeyDown="SearchBox_KeyDown" ToolTip="Part of the station name, e.g. BBC"
+                                     AutomationProperties.Name="Station name"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Margin="0,0,10,0">
                             <TextBlock Text="Country" Style="{StaticResource FieldLabel}"/>
-                            <ComboBox x:Name="CountryBox" IsTextSearchEnabled="True" TextSearch.TextPath="Name"/>
+                            <ComboBox x:Name="CountryBox" IsTextSearchEnabled="True" TextSearch.TextPath="Name" AutomationProperties.Name="Country"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2" Margin="0,0,10,0">
                             <TextBlock Text="Genre (optional)" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="TagBox" KeyDown="SearchBox_KeyDown" ToolTip="e.g. jazz, rock, news, classical"/>
+                            <TextBox x:Name="TagBox" KeyDown="SearchBox_KeyDown" ToolTip="e.g. jazz, rock, news, classical"
+                                     AutomationProperties.Name="Genre"/>
                         </StackPanel>
                         <StackPanel Grid.Column="3" Margin="0,0,10,0">
                             <TextBlock Text="Sort by" Style="{StaticResource FieldLabel}"/>
-                            <ComboBox x:Name="SortBox"/>
+                            <ComboBox x:Name="SortBox" AutomationProperties.Name="Sort by"/>
                         </StackPanel>
                         <Button x:Name="SearchButton" Grid.Column="4" Style="{StaticResource AccentButton}" VerticalAlignment="Bottom"
-                                Margin="0" MinWidth="110" Click="SearchButton_Click">
-                            <TextBlock Text="Search" Foreground="{StaticResource AccentTextBrush}"/>
-                        </Button>
+                                Margin="0" MinWidth="110" Click="SearchButton_Click" Content="Search"/>
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        <ListBox x:Name="ResultsList" ItemTemplate="{StaticResource StationTemplate}"
+                        <ListBox x:Name="ResultsList" ItemTemplate="{StaticResource StationTemplate}" AutomationProperties.Name="Stations"
                                  MouseDoubleClick="List_MouseDoubleClick" KeyDown="List_KeyDown"/>
                         <TextBlock x:Name="ResultsEmptyText" Text="Searching for stations…" HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" Foreground="{StaticResource SubtleTextBrush}" FontSize="16"
+                                   VerticalAlignment="Center" Foreground="{DynamicResource SubtleTextBrush}" FontSize="16"
                                    TextWrapping="Wrap" TextAlignment="Center" Margin="30" IsHitTestVisible="False"/>
                     </Grid>
 
                     <DockPanel Grid.Row="2" Margin="0,10,0,0">
-                        <Button Click="PlaySelectedResult_Click" Style="{StaticResource AccentButton}">
-                            <TextBlock Text="▶  Play selected" Foreground="{StaticResource AccentTextBrush}"/>
-                        </Button>
-                        <Button Click="AddSelectedResultToFavourites_Click">
-                            <TextBlock Text="☆  Add to favourites"/>
-                        </Button>
+                        <Button Click="PlaySelectedResult_Click" Style="{StaticResource AccentButton}" Content="▶  Play selected"/>
+                        <Button Click="AddSelectedResultToFavourites_Click" Content="☆  Add to favourites"/>
                         <TextBlock x:Name="ResultsCountText" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                   Foreground="{StaticResource SubtleTextBrush}" FontSize="13" Text="Tip: double-click a station to play it"/>
+                                   Foreground="{DynamicResource SubtleTextBrush}" FontSize="13" Text="Tip: double-click a station to play it"/>
                     </DockPanel>
                 </Grid>
             </TabItem>
@@ -150,10 +176,11 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Margin="0,0,0,10">
+                    <Grid Margin="0,0,0,6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1.6*"/>
@@ -161,39 +188,34 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,10,0">
                             <TextBlock Text="Filter (name, place, notes)" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="ScannerFilterBox" TextChanged="ScannerFilter_Changed" ToolTip="e.g. tower, NOAA, police, morse"/>
+                            <TextBox x:Name="ScannerFilterBox" TextChanged="ScannerFilter_Changed" ToolTip="e.g. tower, NOAA, police, morse"
+                                     AutomationProperties.Name="Filter scanner feeds"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Margin="0,0,10,0">
                             <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
-                            <ComboBox x:Name="ScannerCategoryBox" SelectionChanged="ScannerFilter_Changed"/>
+                            <ComboBox x:Name="ScannerCategoryBox" SelectionChanged="ScannerFilter_Changed" AutomationProperties.Name="Category"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom">
-                            <Button Click="EditScannerList_Click" ToolTip="Open the feed list in Notepad so you can add your own">
-                                <TextBlock Text="Edit list"/>
-                            </Button>
-                            <Button Click="ReloadScannerList_Click" Margin="0" ToolTip="Reload the feed list after editing">
-                                <TextBlock Text="Reload"/>
-                            </Button>
+                            <Button Click="EditScannerList_Click" ToolTip="Open the feed list in a text editor so you can add your own" Content="Edit list"/>
+                            <Button Click="ReloadScannerList_Click" Margin="0" ToolTip="Reload the feed list after editing" Content="Reload"/>
                         </StackPanel>
                     </Grid>
+                    <TextBlock Grid.Row="1" Style="{StaticResource SubtleText}" Margin="2,0,0,8"
+                               Text="Some feeds relay non-broadcast radio traffic. Check what is permitted where you live, especially before recording."/>
 
-                    <Grid Grid.Row="1">
-                        <ListBox x:Name="ScannerList" ItemTemplate="{StaticResource StationTemplate}"
+                    <Grid Grid.Row="2">
+                        <ListBox x:Name="ScannerList" ItemTemplate="{StaticResource StationTemplate}" AutomationProperties.Name="Scanner feeds"
                                  MouseDoubleClick="List_MouseDoubleClick" KeyDown="List_KeyDown"/>
                         <TextBlock x:Name="ScannerEmptyText" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   Foreground="{StaticResource SubtleTextBrush}" FontSize="16" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource SubtleTextBrush}" FontSize="16" TextWrapping="Wrap"
                                    TextAlignment="Center" Margin="30" IsHitTestVisible="False"/>
                     </Grid>
 
-                    <DockPanel Grid.Row="2" Margin="0,10,0,0">
-                        <Button Click="PlaySelectedScanner_Click" Style="{StaticResource AccentButton}">
-                            <TextBlock Text="▶  Play / open" Foreground="{StaticResource AccentTextBrush}"/>
-                        </Button>
-                        <Button Click="AddSelectedScannerToFavourites_Click">
-                            <TextBlock Text="☆  Add to favourites"/>
-                        </Button>
+                    <DockPanel Grid.Row="3" Margin="0,10,0,0">
+                        <Button Click="PlaySelectedScanner_Click" Style="{StaticResource AccentButton}" Content="▶  Play / open"/>
+                        <Button Click="AddSelectedScannerToFavourites_Click" Content="☆  Add to favourites"/>
                         <TextBlock x:Name="ScannerCountText" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                   Foreground="{StaticResource SubtleTextBrush}" FontSize="13"/>
+                                   Foreground="{DynamicResource SubtleTextBrush}" FontSize="13"/>
                     </DockPanel>
                 </Grid>
             </TabItem>
@@ -205,34 +227,149 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ListBox x:Name="FavouritesList" ItemTemplate="{StaticResource StationTemplate}"
+                    <ListBox x:Name="FavouritesList" ItemTemplate="{StaticResource StationTemplate}" AutomationProperties.Name="Favourites"
                              MouseDoubleClick="List_MouseDoubleClick" KeyDown="List_KeyDown"/>
                     <TextBlock x:Name="FavouritesEmptyText" HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Foreground="{StaticResource SubtleTextBrush}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"
+                               Foreground="{DynamicResource SubtleTextBrush}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"
                                Margin="30" IsHitTestVisible="False"
                                Text="No favourites yet. Find a station you like and press ☆ Add to favourites."/>
                     <DockPanel Grid.Row="1" Margin="0,10,0,0">
-                        <Button Click="PlaySelectedFavourite_Click" Style="{StaticResource AccentButton}">
-                            <TextBlock Text="▶  Play selected" Foreground="{StaticResource AccentTextBrush}"/>
-                        </Button>
-                        <Button Click="RemoveFavourite_Click">
-                            <TextBlock Text="✕  Remove"/>
-                        </Button>
-                        <Button Click="MoveFavourite_Click" Tag="-1" ToolTip="Move up">
-                            <TextBlock Text="▲"/>
-                        </Button>
-                        <Button Click="MoveFavourite_Click" Tag="1" ToolTip="Move down">
-                            <TextBlock Text="▼"/>
-                        </Button>
+                        <Button Click="PlaySelectedFavourite_Click" Style="{StaticResource AccentButton}" Content="▶  Play selected"/>
+                        <Button Click="RemoveFavourite_Click" Content="✕  Remove" AutomationProperties.Name="Remove favourite"/>
+                        <Button Click="MoveFavourite_Click" Tag="-1" ToolTip="Move up" AutomationProperties.Name="Move up" Content="▲"/>
+                        <Button Click="MoveFavourite_Click" Tag="1" ToolTip="Move down" AutomationProperties.Name="Move down" Content="▼"/>
                         <TextBlock x:Name="FavouritesCountText" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                   Foreground="{StaticResource SubtleTextBrush}" FontSize="13"/>
+                                   Foreground="{DynamicResource SubtleTextBrush}" FontSize="13"/>
                     </DockPanel>
                 </Grid>
+            </TabItem>
+
+            <!-- History -->
+            <TabItem Header="History">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="HistoryList" ItemTemplate="{StaticResource HistoryTemplate}" SelectionMode="Extended"
+                             AutomationProperties.Name="Now playing history" KeyDown="HistoryList_KeyDown"/>
+                    <TextBlock x:Name="HistoryEmptyText" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{DynamicResource SubtleTextBrush}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"
+                               Margin="30" IsHitTestVisible="False"
+                               Text="Song and programme titles sent by stations appear here as you listen."/>
+                    <DockPanel Grid.Row="1" Margin="0,10,0,0">
+                        <Button Click="CopyHistorySelected_Click" Content="Copy selected" ToolTip="Copy the selected lines (Ctrl+C)"/>
+                        <Button Click="CopyHistoryAll_Click" Content="Copy all"/>
+                        <Button Click="SearchHistory_Click" Content="Search the web" ToolTip="Look up the selected title in your web browser"/>
+                        <Button Click="RemoveHistory_Click" Content="Remove selected"/>
+                        <Button Click="ClearHistory_Click" Content="Clear all"/>
+                        <TextBlock x:Name="HistoryCountText" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                   Foreground="{DynamicResource SubtleTextBrush}" FontSize="13"/>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- Schedule -->
+            <TabItem Header="Schedule">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.4*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="0.8*"/>
+                            <ColumnDefinition Width="0.9*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="Station (favourites and the current station)" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="ScheduleStationBox" AutomationProperties.Name="Station to record"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                            <TextBlock Text="Day" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="ScheduleDayBox" AutomationProperties.Name="Day"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                            <TextBlock Text="Start (24 h)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox x:Name="ScheduleTimeBox" Text="19:00" ToolTip="For example 07:30 or 19:00" AutomationProperties.Name="Start time"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                            <TextBlock Text="Minutes" Style="{StaticResource FieldLabel}"/>
+                            <TextBox x:Name="ScheduleMinutesBox" Text="60" ToolTip="How long to record (1 to 1440 minutes)" AutomationProperties.Name="Duration in minutes"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4" Margin="0,0,10,0">
+                            <TextBlock Text="Repeat" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="ScheduleRepeatBox" AutomationProperties.Name="Repeat"/>
+                        </StackPanel>
+                        <Button Grid.Column="5" Style="{StaticResource AccentButton}" VerticalAlignment="Bottom" Margin="0" MinWidth="100"
+                                Click="AddSchedule_Click" Content="Add"/>
+                    </Grid>
+                    <TextBlock x:Name="ScheduleHintText" Grid.Row="1" Style="{StaticResource SubtleText}" Margin="2,0,0,8"/>
+                    <Grid Grid.Row="2">
+                        <ListBox x:Name="ScheduleList" ItemTemplate="{StaticResource ScheduleTemplate}" AutomationProperties.Name="Scheduled recordings"/>
+                        <TextBlock x:Name="ScheduleEmptyText" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource SubtleTextBrush}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center"
+                                   Margin="30" IsHitTestVisible="False" Text="No recordings scheduled."/>
+                    </Grid>
+                    <DockPanel Grid.Row="3" Margin="0,10,0,0">
+                        <Button Click="ToggleSchedule_Click" Content="Pause / resume" AutomationProperties.Name="Pause or resume schedule"/>
+                        <Button Click="RemoveSchedule_Click" Content="✕  Remove" AutomationProperties.Name="Remove schedule"/>
+                        <Button Click="OpenRecordingsButton_Click" Content="Recordings folder"/>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- Settings -->
+            <TabItem Header="Settings">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False">
+                    <StackPanel Margin="2,4,12,4" MaxWidth="760" HorizontalAlignment="Left">
+                        <TextBlock Text="Appearance" Style="{StaticResource SectionHeader}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                            <ComboBox x:Name="ThemeBox" Width="220" AutomationProperties.Name="Theme" SelectionChanged="ThemeBox_SelectionChanged"/>
+                            <TextBlock x:Name="ThemeDescriptionText" Style="{StaticResource SubtleText}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Window" Style="{StaticResource SectionHeader}"/>
+                        <CheckBox x:Name="TrayBox" Content="Minimise to the notification area (next to the clock) instead of the taskbar"
+                                  Checked="TrayBox_Changed" Unchecked="TrayBox_Changed" Margin="0,0,0,8"/>
+                        <CheckBox x:Name="CloseToTrayBox" Content="When recordings are scheduled, closing the window keeps Mighty Radio running in the notification area"
+                                  Checked="TrayBox_Changed" Unchecked="TrayBox_Changed" Margin="0,0,0,18"/>
+
+                        <TextBlock Text="Recording" Style="{StaticResource SectionHeader}"/>
+                        <TextBlock x:Name="RecordingsFolderText" Style="{StaticResource SubtleText}" Margin="0,0,0,8"/>
+                        <WrapPanel Margin="0,0,0,18">
+                            <Button Click="ViewNotice_Click" Content="View recording notice" Margin="0,0,8,6"/>
+                            <Button Click="OpenRecordingsButton_Click" Content="Open recordings folder" Margin="0,0,8,6"/>
+                        </WrapPanel>
+
+                        <TextBlock Text="Media keys" Style="{StaticResource SectionHeader}"/>
+                        <TextBlock x:Name="MediaKeysText" Style="{StaticResource SubtleText}" Margin="0,0,0,18"
+                                   Text="Play/Pause starts or stops the radio, Stop stops it, Next and Previous step through your favourites."/>
+
+                        <TextBlock Text="Your data" Style="{StaticResource SectionHeader}"/>
+                        <TextBlock x:Name="DataFolderText" Style="{StaticResource SubtleText}" Margin="0,0,0,8"/>
+                        <Button Click="OpenDataFolder_Click" Content="Open data folder" HorizontalAlignment="Left" Margin="0,0,0,18"/>
+
+                        <TextBlock Text="About" Style="{StaticResource SectionHeader}"/>
+                        <TextBlock x:Name="AboutText" Style="{StaticResource SubtleText}"/>
+                        <Button Click="OpenProjectPage_Click" Content="Project page" HorizontalAlignment="Left" Margin="0,8,0,6"/>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
 
         <!-- Footer -->
-        <TextBlock Grid.Row="3" Margin="2,10,0,0" FontSize="12" Foreground="{StaticResource SubtleTextBrush}"
-                   Text="Station directory by radio-browser.info  ·  Scanner feeds from stations-scanner.json (editable)"/>
+        <DockPanel x:Name="Footer" Grid.Row="3" Margin="2,10,0,0">
+            <TextBlock x:Name="NextRecordingText" DockPanel.Dock="Right" FontSize="12" Foreground="{DynamicResource SubtleTextBrush}"
+                       Margin="12,0,0,0" AutomationProperties.Name="Next scheduled recording"/>
+            <TextBlock FontSize="12" Foreground="{DynamicResource SubtleTextBrush}" TextTrimming="CharacterEllipsis"
+                       Text="Station directory by radio-browser.info  ·  Scanner feeds from stations-scanner.json (editable)"/>
+        </DockPanel>
     </Grid>
 </Window>

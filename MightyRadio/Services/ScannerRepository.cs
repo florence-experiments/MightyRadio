@@ -35,16 +35,18 @@ public static class ScannerRepository
         if (feeds is null)
         {
             problem = $"Your scanner list has a mistake in it, so the built-in list is shown instead. ({error})";
-            feeds = TryRead(Storage.BundledScannerPath, out _) ?? new List<ScannerFeed>();
+            feeds = TryRead(Storage.BundledScannerPath, out _) ?? new List<ScannerFeed?>();
         }
+        // Hand-edited lists can contain null entries or null fields; only http/https links are accepted.
         var stations = feeds
-            .Where(f => !string.IsNullOrWhiteSpace(f.Url) && Uri.TryCreate(f.Url.Trim(), UriKind.Absolute, out _))
+            .OfType<ScannerFeed>()
+            .Where(f => StreamUrl.IsPlayable(f.Url))
             .Select(f => f.ToStation())
             .ToList();
         return new LoadResult(stations, problem);
     }
 
-    private static List<ScannerFeed>? TryRead(string path, out string? error)
+    private static List<ScannerFeed?>? TryRead(string path, out string? error)
     {
         error = null;
         try
@@ -52,7 +54,7 @@ public static class ScannerRepository
             if (!File.Exists(path)) { error = "file not found"; return null; }
             var json = File.ReadAllText(path, Encoding.UTF8).TrimStart();
             // Accept either { "feeds": [...] } or a bare [...] array.
-            if (json.StartsWith("[")) return JsonSerializer.Deserialize<List<ScannerFeed>>(json, Storage.JsonOptions);
+            if (json.StartsWith("[")) return JsonSerializer.Deserialize<List<ScannerFeed?>>(json, Storage.JsonOptions);
             return JsonSerializer.Deserialize<ScannerFile>(json, Storage.JsonOptions)?.Feeds;
         }
         catch (JsonException jex)

@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <!-- Windows 10 SDK TFM gives access to System Media Transport Controls (media keys + Windows media overlay). -->
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
     <UseWPF>true</UseWPF>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -16,9 +18,11 @@
     <RootNamespace>MightyRadio</RootNamespace>
     <Product>Mighty Radio</Product>
     <AssemblyTitle>Mighty Radio</AssemblyTitle>
-    <Description>Mighty Radio - simple internet radio player</Description>
+    <Description>Mighty Radio - simple internet radio and scanner player</Description>
     <Company>Mighty Radio</Company>
-    <Version>1.0.0</Version>
+    <Copyright>Copyright (c) 2026 florence-experiments. MIT licence.</Copyright>
+    <Version>1.1.0</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationIcon>Assets\MightyRadio.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -32,14 +36,44 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
+  <!--
+    Audio-only LibVLC: ship just the plugins needed for internet radio playback and recording
+    (HTTP/HTTPS + TLS, ICY, PLS/M3U/HLS/DASH, MP3/AAC/HE-AAC/Ogg Vorbis/Opus/FLAC/WMA, Windows audio outputs,
+    raw stream dump + TS mux for recording). Video, subtitles, discs, visualisations, Lua scripts and
+    streaming servers are left out. To ship the full engine, delete this ItemGroup.
+  -->
   <ItemGroup>
-    <!-- Ship the VLC runtime files only (skip the .lib import libraries used for C++ linking) -->
-    <VlcWindowsX64IncludeFiles Include="libvlc.dll;libvlccore.dll;hrtfs\%2A%2A;lua\%2A%2A;plugins\%2A%2A" />
+    <VlcWindowsX64IncludeFiles Include="libvlc.dll;libvlccore.dll" />
+    <!-- access: network input -->
+    <VlcWindowsX64IncludeFiles Include="plugins\access\libhttp_plugin.dll;plugins\access\libhttps_plugin.dll;plugins\access\libidummy_plugin.dll" />
+    <!-- TLS for https, XML for DASH manifests -->
+    <VlcWindowsX64IncludeFiles Include="plugins\misc\libgnutls_plugin.dll;plugins\misc\libxml_plugin.dll" />
+    <VlcWindowsX64IncludeFiles Include="plugins\keystore\%2A%2A;plugins\logger\%2A%2A" />
+    <!-- stream filters: caching, prefetch, gzip, ID3 skip -->
+    <VlcWindowsX64IncludeFiles Include="plugins\stream_filter\%2A%2A" />
+    <!-- demuxers -->
+    <VlcWindowsX64IncludeFiles Include="plugins\demux\libadaptive_plugin.dll;plugins\demux\libes_plugin.dll;plugins\demux\libogg_plugin.dll;plugins\demux\libmp4_plugin.dll;plugins\demux\libts_plugin.dll;plugins\demux\libplaylist_plugin.dll;plugins\demux\libasf_plugin.dll;plugins\demux\libmkv_plugin.dll;plugins\demux\libflacsys_plugin.dll;plugins\demux\libwav_plugin.dll;plugins\demux\librawaud_plugin.dll;plugins\demux\libnoseek_plugin.dll;plugins\demux\libdemuxdump_plugin.dll" />
+    <!-- audio decoders (avcodec covers AAC/HE-AAC, WMA, AC3) -->
+    <VlcWindowsX64IncludeFiles Include="plugins\codec\libavcodec_plugin.dll;plugins\codec\libmpg123_plugin.dll;plugins\codec\libvorbis_plugin.dll;plugins\codec\libopus_plugin.dll;plugins\codec\libflac_plugin.dll;plugins\codec\libspeex_plugin.dll;plugins\codec\libaraw_plugin.dll;plugins\codec\liblpcm_plugin.dll;plugins\codec\libg711_plugin.dll;plugins\codec\libadpcm_plugin.dll;plugins\codec\libspdif_plugin.dll;plugins\codec\libddummy_plugin.dll;plugins\codec\libedummy_plugin.dll" />
+    <!-- packetizers for audio -->
+    <VlcWindowsX64IncludeFiles Include="plugins\packetizer\libpacketizer_mpeg4audio_plugin.dll;plugins\packetizer\libpacketizer_mpegaudio_plugin.dll;plugins\packetizer\libpacketizer_flac_plugin.dll;plugins\packetizer\libpacketizer_dts_plugin.dll;plugins\packetizer\libpacketizer_mlp_plugin.dll;plugins\packetizer\libpacketizer_copy_plugin.dll" />
+    <!-- audio pipeline + Windows outputs (spatial audio / HRTF left out) -->
+    <VlcWindowsX64IncludeFiles Include="plugins\audio_filter\%2A%2A;plugins\audio_mixer\%2A%2A;plugins\audio_output\%2A%2A" />
+    <VlcWindowsX64ExcludeFiles Include="plugins\audio_filter\libspatialaudio_plugin.dll" />
+    <!-- recording: stream output to a file -->
+    <VlcWindowsX64IncludeFiles Include="plugins\stream_out\libstream_out_standard_plugin.dll;plugins\stream_out\libstream_out_duplicate_plugin.dll;plugins\stream_out\libstream_out_display_plugin.dll;plugins\stream_out\libstream_out_es_plugin.dll;plugins\stream_out\libstream_out_dummy_plugin.dll" />
+    <VlcWindowsX64IncludeFiles Include="plugins\mux\libmux_ts_plugin.dll;plugins\mux\libmux_ogg_plugin.dll;plugins\mux\libmux_dummy_plugin.dll" />
+    <VlcWindowsX64IncludeFiles Include="plugins\access_output\libaccess_output_file_plugin.dll;plugins\access_output\libaccess_output_dummy_plugin.dll" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\MightyRadio.ico" />
     <Content Include="stations-scanner.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!-- Docs and licence texts travel with every build -->
+    <Content Include="..\docs\README.txt" Link="README.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\licenses\LGPL-2.1.txt" Link="licenses\LGPL-2.1.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
