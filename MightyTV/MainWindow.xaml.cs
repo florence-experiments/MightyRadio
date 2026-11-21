@@ -14,6 +14,11 @@ public partial class MainWindow : Window
     private readonly CancellationTokenSource _loadCts = new();
     private ChannelCatalog? _catalog;
     private bool _suppressFilter;
+    private bool _fullscreen;
+    private WindowStyle _savedStyle;
+    private WindowState _savedState;
+    private GridLength _savedVideoHeight;
+    private GridLength _savedBrowserHeight;
 
     public bool PlayerIdle { get; private set; }
 
@@ -135,6 +140,82 @@ public partial class MainWindow : Window
     {
         if (FindAncestor<ListBoxItem>(e.OriginalSource as DependencyObject) == null) return;
         PlaySelected();
+    }
+
+    private void Window_PreviewKeyDown(object sender, KeyEventArgs e) => HandleFullscreenKey(e);
+
+    private void VideoOverlay_KeyDown(object sender, KeyEventArgs e) => HandleFullscreenKey(e);
+
+    private void VideoOverlay_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is IInputElement element) element.Focus();
+        if (e.ClickCount != 2) return;
+        ToggleFullscreen();
+        e.Handled = true;
+    }
+
+    private void HandleFullscreenKey(KeyEventArgs e)
+    {
+        if (e.Key == Key.F11)
+        {
+            ToggleFullscreen();
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape && _fullscreen)
+        {
+            ExitFullscreen();
+            e.Handled = true;
+        }
+    }
+
+    private void ToggleFullscreen()
+    {
+        if (_fullscreen) ExitFullscreen();
+        else EnterFullscreen();
+    }
+
+    private void EnterFullscreen()
+    {
+        if (_fullscreen) return;
+        _fullscreen = true;
+        _savedStyle = WindowStyle;
+        _savedState = WindowState;
+        _savedVideoHeight = VideoRow.Height;
+        _savedBrowserHeight = BrowserRow.Height;
+        TitleRow.Height = new GridLength(0);
+        SplitterRow.Height = new GridLength(0);
+        BrowserRow.Height = new GridLength(0);
+        BrowserRow.MinHeight = 0;
+        VideoRow.MinHeight = 0;
+        VideoRow.Height = new GridLength(1, GridUnitType.Star);
+        TitleText.Visibility = Visibility.Collapsed;
+        Splitter.Visibility = Visibility.Collapsed;
+        Browser.Visibility = Visibility.Collapsed;
+        Root.Margin = new Thickness(0);
+        VideoBorder.BorderThickness = new Thickness(0);
+        VideoBorder.CornerRadius = new CornerRadius(0);
+        WindowStyle = WindowStyle.None;
+        WindowState = WindowState.Maximized;
+    }
+
+    private void ExitFullscreen()
+    {
+        if (!_fullscreen) return;
+        _fullscreen = false;
+        TitleRow.Height = GridLength.Auto;
+        SplitterRow.Height = GridLength.Auto;
+        VideoRow.MinHeight = 120;
+        VideoRow.Height = _savedVideoHeight;
+        BrowserRow.MinHeight = 180;
+        BrowserRow.Height = _savedBrowserHeight;
+        TitleText.Visibility = Visibility.Visible;
+        Splitter.Visibility = Visibility.Visible;
+        Browser.Visibility = Visibility.Visible;
+        Root.Margin = new Thickness(16, 12, 16, 12);
+        VideoBorder.BorderThickness = new Thickness(1);
+        VideoBorder.CornerRadius = new CornerRadius(12);
+        WindowStyle = _savedStyle;
+        WindowState = _savedState;
     }
 
     private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
