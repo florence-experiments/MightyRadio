@@ -11,6 +11,7 @@ public sealed class IptvOrgClient : IDisposable
     public const string StreamsUrl = "https://iptv-org.github.io/api/streams.json";
     public const string CountriesUrl = "https://iptv-org.github.io/api/countries.json";
     public const string CategoriesUrl = "https://iptv-org.github.io/api/categories.json";
+    public const string GuidesUrl = "https://iptv-org.github.io/api/guides.json";
 
     private readonly HttpClient _http;
     private readonly bool _ownsClient;
@@ -43,6 +44,21 @@ public sealed class IptvOrgClient : IDisposable
         using var countries = new MemoryStream(await countriesTask.ConfigureAwait(false));
         using var categories = new MemoryStream(await categoriesTask.ConfigureAwait(false));
         return ChannelCatalog.Parse(channels, streams, countries, categories);
+    }
+
+    public async Task<GuideDirectory> LoadGuidesAsync(CancellationToken cancellationToken = default)
+    {
+        var bytes = await GetAsync(GuidesUrl, cancellationToken).ConfigureAwait(false);
+        using var stream = new MemoryStream(bytes);
+        return GuideDirectory.Parse(stream);
+    }
+
+    /// <summary>Downloads one XMLTV file and returns Now/Next text, or null when it has nothing useful.</summary>
+    public async Task<string?> NowNextAsync(GuideLink link, DateTimeOffset moment, CancellationToken cancellationToken = default)
+    {
+        var bytes = await GetAsync(link.Url, cancellationToken).ConfigureAwait(false);
+        using var stream = new MemoryStream(bytes);
+        return XmlTvGuide.NowNext(stream, link.SiteId, moment);
     }
 
     public void Dispose()

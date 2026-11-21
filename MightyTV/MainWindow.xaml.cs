@@ -12,6 +12,9 @@ public partial class MainWindow : Window
 {
     private readonly TvPlayer _player;
     private readonly CancellationTokenSource _loadCts = new();
+    private readonly IptvOrgClient _guides = new();
+    private Task<GuideDirectory>? _guideIndex;
+    private int _guideRequest;
     private ChannelCatalog? _catalog;
     private bool _suppressFilter;
     private bool _fullscreen;
@@ -132,6 +135,39 @@ public partial class MainWindow : Window
         if (e.Key == Key.Enter) ApplyFilter();
     }
 
+    private async void ChannelList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var request = ++_guideRequest;
+        SetGuide(null);
+        if (ChannelList.SelectedItem is not ChannelListing channel || channel.Id.StartsWith("stream:", StringComparison.Ordinal))
+            return;
+        try
+        {
+            _guideIndex ??= _guides.LoadGuidesAsync(_loadCts.Token);
+            var index = await _guideIndex;
+            if (request != _guideRequest) return;
+            var link = index.Find(channel.Id);
+            if (link == null) return;
+            var text = await _guides.NowNextAsync(link, DateTimeOffset.Now, _loadCts.Token);
+            if (request != _guideRequest) return;
+            SetGuide(text);
+        }
+        catch (OperationCanceledException) when (_loadCts.IsCancellationRequested)
+        {
+        }
+        catch
+        {
+            if (_guideIndex is { IsFaulted: true } or { IsCanceled: true }) _guideIndex = null;
+            if (request == _guideRequest) SetGuide(null);
+        }
+    }
+
+    private void SetGuide(string? text)
+    {
+        GuideText.Text = text ?? "";
+        GuideText.Visibility = string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+    }
+
     private void ChannelList_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter) PlaySelected();
@@ -229,6 +265,7 @@ public partial class MainWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         _loadCts.Cancel();
+        _guides.Dispose();
         try { Video.MediaPlayer = null; } catch { }
         try
         {

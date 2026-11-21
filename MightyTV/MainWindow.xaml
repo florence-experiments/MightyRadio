@@ -46,6 +46,8 @@
                         <TextBlock x:Name="StatusLabel" Text="LOADING" Style="{StaticResource ReadoutStatusText}"/>
                         <TextBlock x:Name="ChannelNameText" Text="Loading the channel directory…" FontSize="20" FontWeight="SemiBold"
                                    Style="{StaticResource ReadoutText}" Margin="0,3,0,0"/>
+                        <TextBlock x:Name="GuideText" Text="" FontSize="14" Style="{StaticResource ReadoutSubtleText}"
+                                   Margin="0,4,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
                     </StackPanel>
                 </Border>
                 <TextBlock x:Name="MessageText" Text="" FontSize="14" Foreground="{DynamicResource ErrorBrush}"
@@ -99,7 +101,8 @@
 
         <DockPanel Grid.Row="2">
             <TextBlock x:Name="CountText" DockPanel.Dock="Bottom" Text="" Style="{StaticResource SubtleText}" Margin="2,6,0,0"/>
-            <ListBox x:Name="ChannelList" MouseDoubleClick="ChannelList_MouseDoubleClick" KeyDown="ChannelList_KeyDown">
+            <ListBox x:Name="ChannelList" MouseDoubleClick="ChannelList_MouseDoubleClick" KeyDown="ChannelList_KeyDown"
+                     SelectionChanged="ChannelList_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="2,2">

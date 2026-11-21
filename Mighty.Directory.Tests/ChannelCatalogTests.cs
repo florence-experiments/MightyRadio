@@ -129,6 +129,37 @@ public class ChannelCatalogTests
         });
     }
 
+    [Fact]
+    public void Guide_picks_a_playable_source_and_reads_now_next()
+    {
+        const string guides = """
+            [
+              {"channel":"BBCOne.uk","feed":"HD","site_id":"other","lang":"fr","sources":[{"url":"https://example.com/fr.xml"}]},
+              {"channel":"BBCOne.uk","feed":null,"site_id":"bbcone","lang":"en","sources":[{"url":"https://example.com/en.xml"}]},
+              {"channel":"NoGuide.uk","site_id":"x","lang":"en","sources":[]},
+              {"channel":"Hash.uk","site_id":"#","lang":"en","sources":[{"url":"https://example.com/hash.xml"}]}
+            ]
+            """;
+        var directory = GuideDirectory.Parse(Json(guides));
+        var link = directory.Find("BBCOne.uk");
+        Assert.NotNull(link);
+        Assert.Equal("https://example.com/en.xml", link!.Url);
+        Assert.Equal("bbcone", link.SiteId);
+        Assert.Null(directory.Find("NoGuide.uk"));
+        Assert.Null(directory.Find("Hash.uk"));
+
+        const string xml = """
+            <tv>
+              <programme start="20261121190000 +0000" stop="20261121200000 +0000" channel="bbcone"><title>Evening News</title></programme>
+              <programme start="20261121200000 +0000" stop="20261121213000 +0000" channel="bbcone"><title>Film</title></programme>
+              <programme start="20261121190000 +0000" stop="20261121220000 +0000" channel="other"><title>Ignore</title></programme>
+            </tv>
+            """;
+        var moment = new DateTimeOffset(2026, 11, 21, 19, 30, 0, TimeSpan.Zero);
+        Assert.Equal("Now: Evening News  ·  Next: Film", XmlTvGuide.NowNext(Json(xml), "bbcone", moment));
+        Assert.Null(XmlTvGuide.NowNext(Json("not xml"), "bbcone", moment));
+    }
+
     private static ChannelCatalog ParseSample() =>
         ChannelCatalog.Parse(Json(Channels), Json(Streams), Json(Countries), Json(Categories));
 

@@ -21,7 +21,8 @@ Mighty Radio is unchanged. The two apps are not merged.
 2. The list defaults to the **United Kingdom**. Pick **Any country** or another country, and optionally a category. Channels iptv-org marks as adult stay hidden until **Adult** is ticked.
 3. Type part of a name and press **Search** or Enter. Matching includes alternative names from the directory.
 4. Double-click a row, or select it and press **Play**. **Stop** and the volume slider do what they say. Drag the bar under the picture to give more room to the video or the list. Double-click the picture, or press F11, for fullscreen. Esc leaves fullscreen.
-5. A stream that fails, ends immediately, or does not answer within 20 seconds shows a status message and does not close the app.
+5. Selecting a channel looks up iptv-org listings when that channel has a guide file. The readout shows Now and Next. Channels with no guide stay blank.
+6. A stream that fails, ends immediately, or does not answer within 20 seconds shows a status message and does not close the app.
 
 Only `http` and `https` addresses are played. When a channel has several streams, the highest resolution http(s) URL is used. `user_agent` and an http(s) `referrer` from the directory are passed through to VLC. Streams with no channel id still appear when the country filter is **Any country**.
 
