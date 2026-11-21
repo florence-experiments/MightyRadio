@@ -9,6 +9,13 @@ weather, ham and shortwave feeds, keep favourites, and record what you hear. Pla
 - Three themes: **Brass & Amber** (default), **Phosphor** and **Dark**
 - No account, no ads, no telemetry
 
+## Mighty TV
+
+A first slice of a sister app for live TV streams is in [`MightyTV/`](MightyTV/README.md).
+Channel models, the iptv-org download and the name/country/category filters live in
+[`Mighty.Directory/`](Mighty.Directory/), a plain .NET 8 library with no WPF types, so a later
+Android (MAUI) app or a merged radio and TV app can reference it. Mighty Radio itself is unchanged.
+
 ## Features
 
 - **Radio stations**: search by name, country (United Kingdom by default) and genre. Sort by popularity, plays, trend or name. Double-click to play.

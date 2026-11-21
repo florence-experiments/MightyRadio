@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Mighty.Directory</RootNamespace>
+    <AssemblyName>Mighty.Directory</AssemblyName>
+    <Description>iptv-org channel directory, models and filters. No UI dependencies, so WPF and a future MAUI/Android app can share it.</Description>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+</Project>
