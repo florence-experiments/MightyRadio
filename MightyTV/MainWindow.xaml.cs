@@ -86,7 +86,7 @@ public partial class MainWindow : Window
         if (_catalog == null || _suppressFilter) return;
         var country = (CountryBox.SelectedItem as CountryOption)?.Code;
         var category = (CategoryBox.SelectedItem as CategoryOption)?.Id;
-        var list = _catalog.Filter(NameBox.Text, country, category);
+        var list = _catalog.Filter(NameBox.Text, country, category, AdultBox.IsChecked == true);
         ChannelList.ItemsSource = list;
         CountText.Text = list.Count == 1 ? "1 channel" : $"{list.Count} channels";
     }
@@ -124,6 +124,7 @@ public partial class MainWindow : Window
     private void PlayButton_Click(object sender, RoutedEventArgs e) => PlaySelected();
     private void StopButton_Click(object sender, RoutedEventArgs e) => _player.Stop();
     private void SearchButton_Click(object sender, RoutedEventArgs e) => ApplyFilter();
+    private void AdultBox_Changed(object sender, RoutedEventArgs e) => ApplyFilter();
     private void Filter_Changed(object sender, SelectionChangedEventArgs e) => ApplyFilter();
 
     private void NameBox_KeyDown(object sender, KeyEventArgs e)

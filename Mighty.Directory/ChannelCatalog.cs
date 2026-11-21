@@ -4,8 +4,8 @@ namespace Mighty.Directory;
 
 /// <summary>
 /// Joined iptv-org directory. Every country and category in the source files is kept.
-/// Rows are channels (or stray streams) that have an http/https URL; nothing else is dropped
-/// (closed and NSFW channels stay). This type does not touch WPF.
+/// Rows are channels (or stray streams) that have an http/https URL. Closed channels stay.
+/// Adult (is_nsfw) rows stay in <see cref="Channels"/> and are omitted by <see cref="Filter"/> unless requested.
 /// </summary>
 public sealed class ChannelCatalog
 {
@@ -47,18 +47,20 @@ public sealed class ChannelCatalog
 
     /// <summary>
     /// Name is a case-insensitive substring of the channel name or an alternative name.
-    /// Blank country or category means no filter on that axis.
+    /// Blank country or category means no filter on that axis. Adult channels are excluded unless
+    /// <paramref name="includeAdult"/> is true.
     /// </summary>
-    public IReadOnlyList<ChannelListing> Filter(string? name, string? countryCode, string? categoryId)
+    public IReadOnlyList<ChannelListing> Filter(string? name, string? countryCode, string? categoryId, bool includeAdult = false)
     {
         var nameQuery = string.IsNullOrWhiteSpace(name) ? null : name.Trim().ToLowerInvariant();
         var country = string.IsNullOrWhiteSpace(countryCode) ? null : countryCode.Trim();
         var category = string.IsNullOrWhiteSpace(categoryId) ? null : categoryId.Trim();
-        if (nameQuery == null && country == null && category == null) return Channels;
+        if (includeAdult && nameQuery == null && country == null && category == null) return Channels;
 
         var result = new List<ChannelListing>();
         foreach (var channel in Channels)
         {
+            if (!includeAdult && channel.IsAdult) continue;
             if (country != null && !string.Equals(channel.CountryCode, country, StringComparison.OrdinalIgnoreCase))
                 continue;
             if (category != null && !HasCategory(channel, category))
@@ -204,12 +206,13 @@ public sealed class ChannelCatalog
             BlankToNull(stream.Quality),
             CleanAgent(stream.UserAgent),
             CleanReferrer(stream.Referrer),
+            channel.IsNsfw,
             SearchBlob(channel.Name, channel.AltNames, stream.Title));
     }
 
     private static ChannelListing Loose(string id, string name, StreamRecord stream) =>
         new(id, name, "", "", Array.Empty<string>(), "", stream.Url!.Trim(), BlankToNull(stream.Quality),
-            CleanAgent(stream.UserAgent), CleanReferrer(stream.Referrer), SearchBlob(name, null, stream.Title));
+            CleanAgent(stream.UserAgent), CleanReferrer(stream.Referrer), false, SearchBlob(name, null, stream.Title));
 
     private static string SearchBlob(string? name, List<string>? altNames, string? title)
     {

@@ -65,7 +65,9 @@ public class ChannelCatalogTests
         var old = catalog.Channels.Single(c => c.Id == "Old.uk");
         Assert.Null(old.UserAgent);
         Assert.Null(old.Referrer);
-        Assert.Contains(catalog.Channels, c => c.Name == "Night");
+        var night = catalog.Channels.Single(c => c.Name == "Night");
+        Assert.True(night.IsAdult);
+        Assert.False(catalog.Channels.Single(c => c.Id == "BBCOne.uk").IsAdult);
     }
 
     [Fact]
@@ -81,8 +83,10 @@ public class ChannelCatalogTests
         var ukGeneral = catalog.Filter(null, "UK", "general").Select(c => c.Name).ToArray();
         Assert.Equal(new[] { "BBC One" }, ukGeneral);
 
-        Assert.Equal("Night", Assert.Single(catalog.Filter(null, null, "xxx")).Name);
-        Assert.Equal(catalog.Channels.Count, catalog.Filter("  ", " ", null).Count);
+        Assert.Empty(catalog.Filter(null, null, "xxx"));
+        Assert.Equal("Night", Assert.Single(catalog.Filter(null, null, "xxx", includeAdult: true)).Name);
+        Assert.DoesNotContain(catalog.Filter("  ", " ", null), c => c.IsAdult);
+        Assert.Equal(catalog.Channels.Count, catalog.Filter("  ", " ", null, includeAdult: true).Count);
     }
 
     [Fact]

@@ -18,7 +18,7 @@ Mighty Radio is unchanged. The two apps are not merged.
 ## Using it
 
 1. On startup the app downloads `channels.json`, `streams.json`, `countries.json` and `categories.json` from `https://iptv-org.github.io/api/`.
-2. The list defaults to the **United Kingdom**. Pick **Any country** or another country, and optionally a category.
+2. The list defaults to the **United Kingdom**. Pick **Any country** or another country, and optionally a category. Channels iptv-org marks as adult stay hidden until **Adult** is ticked.
 3. Type part of a name and press **Search** or Enter. Matching includes alternative names from the directory.
 4. Double-click a row, or select it and press **Play**. **Stop** and the volume slider do what they say. Drag the bar under the picture to give more room to the video or the list. Double-click the picture, or press F11, for fullscreen. Esc leaves fullscreen.
 5. A stream that fails, ends immediately, or does not answer within 20 seconds shows a status message and does not close the app.

@@ -16,6 +16,7 @@ public sealed class ChannelListing
         string? quality,
         string? userAgent,
         string? referrer,
+        bool isAdult,
         string searchText)
     {
         Id = id;
@@ -28,6 +29,7 @@ public sealed class ChannelListing
         Quality = quality;
         UserAgent = userAgent;
         Referrer = referrer;
+        IsAdult = isAdult;
         SearchText = searchText;
     }
 
@@ -43,6 +45,8 @@ public sealed class ChannelListing
     public string? UserAgent { get; }
     /// <summary>Optional http/https referrer from the directory.</summary>
     public string? Referrer { get; }
+    /// <summary>True when iptv-org marks the channel is_nsfw. Hidden unless the user asks for adult channels.</summary>
+    public bool IsAdult { get; }
 
     public override string ToString() => Name;
 
@@ -96,6 +100,7 @@ internal sealed class ChannelRecord
     [JsonPropertyName("alt_names")] public List<string>? AltNames { get; set; }
     [JsonPropertyName("country")] public string? Country { get; set; }
     [JsonPropertyName("categories")] public List<string>? Categories { get; set; }
+    [JsonPropertyName("is_nsfw")] public bool IsNsfw { get; set; }
 }
 
 internal sealed class StreamRecord
