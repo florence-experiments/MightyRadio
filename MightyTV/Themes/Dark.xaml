@@ -1,0 +1,36 @@
+<!-- Palette: Dark (the original v1.0 look). Styles live in Controls.xaml. -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="WindowBrush" Color="#16171D"/>
+    <SolidColorBrush x:Key="PanelBrush" Color="#22242D"/>
+    <SolidColorBrush x:Key="PanelAltBrush" Color="#2B2E39"/>
+    <SolidColorBrush x:Key="InputBrush" Color="#2B2E39"/>
+    <SolidColorBrush x:Key="HoverBrush" Color="#353946"/>
+    <SolidColorBrush x:Key="SelectedBrush" Color="#4A3328"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#3A3E4C"/>
+    <SolidColorBrush x:Key="TextBrush" Color="#F0F0F3"/>
+    <SolidColorBrush x:Key="SubtleTextBrush" Color="#A9ADBA"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#FF7A45"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#FF946A"/>
+    <SolidColorBrush x:Key="AccentTextBrush" Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="FocusBrush" Color="#FFB08A"/>
+    <SolidColorBrush x:Key="RecordBrush" Color="#E5484D"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#FF8A80"/>
+    <SolidColorBrush x:Key="OkBrush" Color="#7EE2A8"/>
+
+    <SolidColorBrush x:Key="DisplayBrush" Color="#22242D"/>
+    <SolidColorBrush x:Key="DisplayBorderBrush" Color="#3A3E4C"/>
+    <SolidColorBrush x:Key="DisplayTextBrush" Color="#F0F0F3"/>
+    <SolidColorBrush x:Key="DisplaySubtleBrush" Color="#A9ADBA"/>
+    <SolidColorBrush x:Key="DisplayStatusBrush" Color="#FF7A45"/>
+    <FontFamily x:Key="DisplayFont">Segoe UI</FontFamily>
+    <DropShadowEffect x:Key="DisplayGlow" ShadowDepth="0" BlurRadius="0" Opacity="0" Color="Black"/>
+
+    <SolidColorBrush x:Key="ScrollTrackBrush" Color="#1C1D24"/>
+    <SolidColorBrush x:Key="ScrollThumbBrush" Color="#4A4F5E"/>
+    <SolidColorBrush x:Key="ScrollThumbHoverBrush" Color="#FF7A45"/>
+
+    <CornerRadius x:Key="ControlCorner">8</CornerRadius>
+    <CornerRadius x:Key="PanelCorner">12</CornerRadius>
+    <CornerRadius x:Key="ItemCorner">6</CornerRadius>
+</ResourceDictionary>

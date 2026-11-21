@@ -39,6 +39,10 @@ NuGet cache (`libvlcsharp/3.10.2`, `videolan.libvlc.windows/3.0.24`).
   SomaFM, wxradio.org, LiveATC.net, Broadcastify, the University of Twente WebSDR). Those operators' terms
   apply. Mighty Radio does not host or redistribute any of their audio.
 
+## Mighty TV
+
+`MightyTV/` is a separate lab app in this repository. It uses the same LibVLC 3.0.24 and LibVLCSharp 3.10.2 packages as Mighty Radio, but it ships the full Windows x64 plugin set, including video decoders and outputs, rather than the audio-only subset. The LGPL notes above apply to that wider set. Channel data comes from the public iptv-org API (https://github.com/iptv-org/api). Mighty TV downloads that JSON when it starts and does not redistribute the streams.
+
 ## Icon
 
 `MightyRadio/Assets/MightyRadio.ico`: its origin is not recorded in the source. Before publishing, confirm it

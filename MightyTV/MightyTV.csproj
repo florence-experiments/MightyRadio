@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>MightyTV</RootNamespace>
+    <AssemblyName>MightyTV</AssemblyName>
+    <Product>Mighty TV</Product>
+    <AssemblyTitle>Mighty TV</AssemblyTitle>
+    <Description>Mighty TV - live television streams from the iptv-org directory</Description>
+    <Version>0.1.0</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <!-- Full VLC engine: television needs the video plugins Mighty Radio leaves out. -->
+    <VlcWindowsX64Enabled>true</VlcWindowsX64Enabled>
+    <VlcWindowsX86Enabled>false</VlcWindowsX86Enabled>
+    <VlcWindowsArm64Enabled>false</VlcWindowsArm64Enabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mighty.Directory\Mighty.Directory.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibVLCSharp" Version="3.10.2" />
+    <PackageReference Include="LibVLCSharp.WPF" Version="3.10.2" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.24" />
+  </ItemGroup>
+
+  <!-- Same static XAML check as Mighty Radio. Skip with -p:SkipXamlCheck=true. -->
+  <Target Name="CheckXamlResources" BeforeTargets="BeforeBuild"
+          Condition="'$(OS)' != 'Windows_NT' And '$(SkipXamlCheck)' != 'true'">
+    <Exec Command="python3 &quot;$(MSBuildProjectDirectory)/../tools/check-xaml-resources.py&quot; &quot;$(MSBuildProjectDirectory)&quot;" />
+  </Target>
+
+</Project>
